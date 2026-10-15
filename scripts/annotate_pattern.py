@@ -99,7 +99,7 @@ def render(path,output):
              ('Front vertical rise incl. band',f"{v['rise']+v['band_height']:.2f}"),('Back waist raise',f"{v['back_raise']:.2f}"),
              ('Shell opening / leg',f"{v['hem']:.2f}"),('Waistband finished height',f"{v['band_height']:.2f}"),('Cuff finished height',f"{v['cuff_height']:.2f}")]
     for i,(k,val) in enumerate(summary):text(905,168+i*29,k,14);text(1345,168+i*29,val,15,anchor='end')
-    for i,t in enumerate([f"{v['shell_length']+v['band_height']+v['cuff_height']:g} cm is developed fabric length.", 'Cuffs sit at the ankle; excess blouses.', 'Crotch seam length differs from', 'vertical rise and from body height.', 'Rib lengths remain provisional.']):text(905,490+i*23,t,14)
+    for i,t in enumerate([f"{v['shell_length']+v['band_height']+v['cuff_height']:.2f} cm is developed fabric length.", 'Cuffs sit at the ankle; excess blouses.', 'Crotch seam length differs from', 'vertical rise and from body height.', 'Rib lengths remain provisional.']):text(905,490+i*23,t,14)
     # Rib rectangles are raw cutting dimensions, explicitly distinguished from shell seams.
     for i,(pre,key,heightkey,x,y) in enumerate([('W','band_length','band_height',110,680),('C','cuff_length','cuff_height',790,680)]):
         length=v[key]; height=2*v[heightkey];sa=v['sa'];s=10.5;w=(length+2*sa)*s;h=(height+2*sa)*s

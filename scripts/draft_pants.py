@@ -1,41 +1,78 @@
 """Generate an original, parameterised Seamly2D trouser block (centimetres)."""
 from pathlib import Path
 import xml.etree.ElementTree as ET
+import math
+from annotate_pattern import curve_length
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'patterns/children_pants_86'
+def calibrated_shape(hip_width, waist_length, back_raise, hip_depth, extension, rise_target):
+    """Calibrate a unit-length cubic, retaining the original crotch extensions."""
+    waist_x = math.sqrt(waist_length**2-back_raise**2)
+    upper = math.hypot(hip_width-waist_x, hip_depth+back_raise)
+    target = rise_target-upper
+    assert target > extension > 0
+    def length(drop):
+        return curve_length(((0,0),(0,.75*drop),(.3*extension,drop),(extension,drop)))
+    lo,hi=0.0,rise_target
+    for _ in range(60):
+        mid=(lo+hi)/2
+        if length(mid)<target:lo=mid
+        else:hi=mid
+    drop=(lo+hi)/2
+    return extension/target,drop/target
+
+
+# Shape ratios make the curve a scaled unit-length cubic. Editing rise targets
+# inside Seamly2D therefore updates the actual seam lengths without an external solver.
+FDX,FDY=calibrated_shape(16.5,16,0,8,2.75,18)
+BDX,BDY=calibrated_shape(18,18,2,8,5.5,23.5)
 # Formula order is significant in Seamly2D's Variables table.
 VARIABLES = [
  ('size', '86', 'Nominal height size; label only, not automatic grading'),
- ('waist', '50', 'Measured waist circumference'),
- ('hip', '55', 'Measured hip circumference'),
- ('outseam', '41', 'Dressed body waistband to bare floor at side; garment length derived separately'),
- ('inseam', '25', 'Vertical crotch to floor measured OVER diaper and leggings, NOT seam length'),
- ('hip_ease', '10', 'Total hip ease for an outer layer over leggings'),
- ('crotch_drop', '2', 'Baseline crotch drop beyond dressed body rise'),
- ('rise_ease', '1', 'Additional rise ease for sitting and squatting'),
- ('leg_ease', '2', 'Additional length relative to floor-based draft; ankle blousing checked at fitting'),
+ ('waist', '50', 'Measured body waist circumference'),
+ ('hip', '55', 'Measured body hip circumference'),
+ ('outseam', '41', 'Dressed body waistband to bare floor at side; reference only'),
+ ('inseam', '25', 'Vertical crotch to floor measured OVER diaper and leggings; reference only'),
+ ('front_rise_target', '18', 'Front seam-walked rise, excluding rib waistband and seam allowance'),
+ ('back_rise_target', '23.5', 'Back seam-walked rise, excluding rib waistband and seam allowance'),
+ ('front_waist', '16', 'Front piece waist stitching-line length'),
+ ('back_waist', '18', 'Back piece waist stitching-line length, including its slope'),
+ ('front_width', '16.5', 'Front piece horizontal hip width'),
+ ('back_width', '18', 'Back piece horizontal hip width'),
+ ('hem_width', '12.8', 'Hem stitching-line width on EACH front and back piece'),
+ ('hip_depth', '8', 'Hip reference level below shell side waist'),
  ('band_height', '3', 'Finished folded waistband height'),
  ('cuff_height', '3', 'Finished folded ankle cuff height'),
- ('back_raise', '2', 'Extra height at centre back, tapered to zero at side'),
- ('hem', '24', 'Shell opening circumference per leg, before gathering'),
+ ('back_raise', '2', 'Centre back above side waist'),
  ('ankle', '16', 'PROVISIONAL ankle circumference; replace with measurement'),
  ('cuff_ease', '2', 'PROVISIONAL positive ankle ease for firm ribbing'),
  ('waist_ratio', '0.94', 'PROVISIONAL rib loop / body waist; verify recovery and hip passage'),
- ('sa', '1', 'Uniform seam allowance added by Seamly2D, cm'),
- ('hip_finished', '#hip+#hip_ease', 'Finished circumference at hip'),
- ('front_width', '#hip_finished/4-0.5', 'Front quarter hip width'),
- ('back_width', '#hip_finished/4+0.5', 'Back quarter hip width'),
- ('front_ext', '#hip/20', 'Front crotch extension beyond centre front'),
- ('back_ext', '#hip/10', 'Back crotch extension beyond centre back'),
- ('rise', '#outseam-#inseam+#crotch_drop+#rise_ease-#band_height', 'Shell side waist to front crotch level'),
- ('shell_length', '#outseam+#rise_ease+#leg_ease-#band_height-#cuff_height', 'Exact vertical shell side seam length'),
- ('front_run', '#front_width+#front_ext-#hem/2', 'Horizontal front inseam run'),
- ('back_run', '#back_width+#back_ext-#hem/2', 'Horizontal back inseam run'),
- ('back_crotch_y', '#shell_length-sqrt((#shell_length-#rise)^2+#front_run^2-#back_run^2)', 'Lower back tip to match straight inseam seam lengths'),
+ ('sa', '1', 'Uniform seam allowance, cm'),
+ ('hip_finished', '2*(#front_width+#back_width)', 'Full finished shell hip circumference'),
+ ('hip_ease', '#hip_finished-#hip', 'Resulting total hip ease'),
+ ('hem', '2*#hem_width', 'Shell opening circumference per leg'),
+ ('front_waist_x', '#front_waist', 'Horizontal front waist projection'),
+ ('back_waist_x', 'sqrt(#back_waist^2-#back_raise^2)', 'Horizontal back waist projection'),
+ ('front_upper', 'sqrt((#front_width-#front_waist_x)^2+#hip_depth^2)', 'Straight centre front above crotch curve'),
+ ('back_upper', 'sqrt((#back_width-#back_waist_x)^2+(#hip_depth+#back_raise)^2)', 'Straight centre back above crotch curve'),
+ ('front_curve_length', '#front_rise_target-#front_upper', 'Required front crotch curve length'),
+ ('back_curve_length', '#back_rise_target-#back_upper', 'Required back crotch curve length'),
+ ('front_shape_dx', f'{FDX:.15g}', 'Calibrated curve horizontal unit-length ratio; do not edit'),
+ ('front_shape_dy', f'{FDY:.15g}', 'Calibrated curve vertical unit-length ratio; do not edit'),
+ ('back_shape_dx', f'{BDX:.15g}', 'Calibrated curve horizontal unit-length ratio; do not edit'),
+ ('back_shape_dy', f'{BDY:.15g}', 'Calibrated curve vertical unit-length ratio; do not edit'),
+ ('front_ext', '#front_curve_length*#front_shape_dx', 'Front crotch extension derived from target curve length'),
+ ('back_ext', '#back_curve_length*#back_shape_dx', 'Back crotch extension derived from target curve length'),
+ ('rise', '#hip_depth+#front_curve_length*#front_shape_dy', 'Front crotch-tip depth below shell side waist'),
+ ('back_crotch_y', '#hip_depth+#back_curve_length*#back_shape_dy', 'Back crotch-tip depth below shell side waist'),
+ ('front_run', '#front_width+#front_ext-#hem_width', 'Horizontal front inseam run'),
+ ('back_run', '#back_width+#back_ext-#hem_width', 'Horizontal back inseam run'),
+ ('shell_length', '(#back_crotch_y^2-#rise^2+#back_run^2-#front_run^2)/(2*(#back_crotch_y-#rise))', 'Common side length solved to match both inseams'),
  ('band_length', '#waist*#waist_ratio', 'Finished relaxed waistband loop, provisional'),
  ('cuff_length', '#ankle+#cuff_ease', 'Finished relaxed cuff loop, provisional'),
 ]
+
 
 
 def sub(parent, tag, **attrs):
@@ -47,7 +84,7 @@ def generate():
     r = ET.Element('pattern')
     for tag, text in [('version', '0.7.5'), ('unit', 'cm'),
                       ('description', 'Size 86 roomy overtrousers; original draft; cut front/back mirrored pairs. Folded rib waistband and cuffs. Fit sample required.'),
-                      ('notes', 'All inputs in Variables. No external measurement file. Hip ease 10 cm. 44 cm developed side length: 41 cm body reference plus 1 cm rise ease and 2 cm leg blousing. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.'),
+                      ('notes', 'All inputs in Variables. No external measurement file. User revised seam targets: front/back rise 18/23.5, waist 16/18, hip width 16.5/18, each piece hem 12.8 cm. Side length solved to match inseams. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.'),
                       ('measurements', '')]:
         sub(r, tag).text = text
     vs = sub(r, 'variables')
@@ -81,15 +118,16 @@ def generate():
                        angle1=angle1,angle2=angle2,length1=len1,length2=len2,color='black',penStyle='solidLine').get('id')
         if ext:
             sw = anchor
-            cw = point('Waist', width, '-('+raise_+')')
-            ch = point('Hip', width, '#rise*0.5')
+            waist_x = '#front_waist_x' if prefix=='F' else '#back_waist_x'
+            cw = point('Waist', waist_x, '-('+raise_+')')
+            ch = point('Hip', width, '#hip_depth')
             ct = point('Crotch', width+'+'+ext, tip)
             ih = point('InnerHem', '#hem/2', '#shell_length')
             oh = point('OuterHem', '0', '#shell_length')
             # Smooth vertical centre-to-horizontal crotch scoop; endpoints remain editable.
-            scoop = curve(ch,ct,'270','180', '('+tip+'-#rise*0.5)*0.75', ext+'*0.7')
+            scoop = curve(ch,ct,'270','180', '('+tip+'-#hip_depth)*0.75', ext+'*0.7')
             line(sw,cw); line(cw,ch); line(ct,ih); line(ih,oh); line(oh,sw)
-            hip_outer=point('HipSide','0','#rise*0.5'); line(hip_outer,ch,'dashLine')
+            hip_outer=point('HipSide','0','#hip_depth'); line(hip_outer,ch,'dashLine')
             ga=point('GrainTop','#hem/4','#rise'); gb=point('GrainBottom','#hem/4','#shell_length-2');line(ga,gb,'dashLine')
             outline=[('point',sw),('point',cw),('point',ch),('spline',scoop),('point',ct),('point',ih),('point',oh)]
             quantity=2

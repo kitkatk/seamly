@@ -63,18 +63,33 @@ def check(path=PATTERN, schema=None):
     side_f=distance(names['FO'],names['FOuterHem'])
     side_b=distance(names['BO'],names['BOuterHem'])
     assert abs(side_f-side_b)<1e-8
-    assert abs(side_f+variables['band_height']+variables['cuff_height']-variables['outseam']-variables['rise_ease']-variables['leg_ease'])<1e-8
+    assert side_f>variables['rise'] and side_f>variables['back_crotch_y'], 'Hem must be below crotch tips'
     hip=2*(distance(names['FHipSide'],names['FHip'])+distance(names['BHipSide'],names['BHip']))
     assert abs(hip-variables['hip']-variables['hip_ease'])<1e-8
     shell_waist=2*(distance(names['FO'],names['FWaist'])+distance(names['BO'],names['BWaist']))
     for p in ('F','B'):
         assert names[p+'InnerHem'][1]>names[p+'Crotch'][1]>names[p+'Hip'][1]
+    from annotate_pattern import curve_length
+    contours = {}
+    for prefix, target in [('F','front_rise_target'),('B','back_rise_target')]:
+        arc = next(c for c in curves.values() if math.dist(c[0],names[prefix+'Hip'])<1e-8)
+        rise = distance(names[prefix+'Waist'],names[prefix+'Hip']) + curve_length(arc)
+        assert abs(rise-variables[target])<1e-6, 'Seam-walked rise target not met'
+        assert abs(distance(names[prefix+'O'],names[prefix+'Waist'])-variables['front_waist' if prefix=='F' else 'back_waist'])<1e-8
+        assert abs(distance(names[prefix+'HipSide'],names[prefix+'Hip'])-variables['front_width' if prefix=='F' else 'back_width'])<1e-8
+        assert abs(distance(names[prefix+'OuterHem'],names[prefix+'InnerHem'])-variables['hem_width'])<1e-8
+        contours[prefix]=rise
     result={
         'hip_circumference_cm':round(hip,3), 'shell_waist_circumference_cm':round(shell_waist,3),
         'finished_side_length_cm':round(side_f+variables['band_height']+variables['cuff_height'],3),
         'matching_inseam_seam_length_cm':round(front,3),
-        'extra_rise_ease_cm':variables['rise_ease'],
-        'extra_leg_blousing_cm':variables['leg_ease'],
+        'front_rise_seam_cm':round(contours['F'],3),
+        'back_rise_seam_cm':round(contours['B'],3),
+        'front_waist_seam_cm':variables['front_waist'],
+        'back_waist_seam_cm':variables['back_waist'],
+        'front_hip_width_cm':variables['front_width'],
+        'back_hip_width_cm':variables['back_width'],
+        'hem_width_each_piece_cm':variables['hem_width'],
         'shell_side_seam_cm':round(side_f,3),
         'front_crotch_depth_from_finished_side_waist_cm':variables['rise']+variables['band_height'],
         'upper_thigh_circumference_at_tips_cm':round(variables['front_width']+variables['front_ext']+variables['back_width']+variables['back_ext'],3),

@@ -1,22 +1,22 @@
 {
   "F": {
-    "waist": 15.75,
-    "upper_centre": 8.0,
-    "crotch_curve": 9.255755012959389,
-    "inseam": 22.940139493908926,
-    "hem": 12.0,
-    "side": 38.0,
-    "hip_width": 15.750000000000002,
-    "full_rise_seam": 17.25575501295939
+    "waist": 16.0,
+    "upper_centre": 8.0156097709407,
+    "crotch_curve": 9.9843902290593,
+    "inseam": 22.21375940048062,
+    "hem": 12.8,
+    "side": 38.03184100051265,
+    "hip_width": 16.5,
+    "full_rise_seam": 18.0
   },
   "B": {
-    "waist": 16.868980407837338,
-    "upper_centre": 10.0,
-    "crotch_curve": 12.522440393254016,
-    "inseam": 22.940139493908926,
-    "hem": 12.0,
-    "side": 38.0,
-    "hip_width": 16.75,
-    "full_rise_seam": 22.522440393254016
+    "waist": 18.0,
+    "upper_centre": 10.000621104714474,
+    "crotch_curve": 13.499378895285524,
+    "inseam": 22.213759400480626,
+    "hem": 12.799999999999997,
+    "side": 38.03184100051265,
+    "hip_width": 18.0,
+    "full_rise_seam": 23.5
   }
 }
