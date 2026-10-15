@@ -68,7 +68,7 @@ def render(path,output):
         def point(s):return xy(p[pre+s])
         sw,cw,ch,ct,ih,oh=[point(s) for s in ['O','Waist','Hip','Crotch','InnerHem','OuterHem']]
         c=cs[0]; cv=[xy(q) for q in c]
-        d=f'M {sw[0]},{sw[1]} L {cw[0]},{cw[1]} L {ch[0]},{ch[1]} C {cv[1][0]},{cv[1][1]} {cv[2][0]},{cv[2][1]} {ct[0]},{ct[1]} L {ih[0]},{ih[1]} L {oh[0]},{oh[1]} Z'
+        d=f'M {sw[0]},{sw[1]} L {cw[0]},{cw[1]} L {ch[0]},{ch[1]} C {cv[1][0]},{cv[1][1]} {cv[2][0]},{cv[2][1]} {ct[0]},{ct[1]} L {ih[0]},{ih[1]} L {oh[0]},{oh[1]} L {point('HipSide')[0]},{point('HipSide')[1]} Z'
         add(f'<path d="{d}" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>')
         for label,pos in [('O',sw),('Waist',cw),('Hip',ch),('Crotch',ct),('InnerHem',ih),('OuterHem',oh)]:
             add(f'<circle cx="{pos[0]}" cy="{pos[1]}" r="2.5" fill="#24344a"/>')
@@ -76,7 +76,7 @@ def render(path,output):
         text(ox+12,oy+38,'FRONT' if idx==0 else 'BACK',20)
         def dist(a,b):return math.dist(p[pre+a],p[pre+b])
         lens={'waist':dist('O','Waist'),'upper_centre':dist('Waist','Hip'),'crotch_curve':curve_length(c),
-              'inseam':dist('Crotch','InnerHem'),'hem':dist('InnerHem','OuterHem'),'side':dist('OuterHem','O'),
+              'inseam':dist('Crotch','InnerHem'),'hem':dist('InnerHem','OuterHem'),'side':dist('OuterHem','HipSide')+dist('HipSide','O'),
               'hip_width':dist('HipSide','Hip')}
         assert abs(lens['crotch_curve']-curve_length(c,512))<1e-6
         assert lens['crotch_curve']>=math.dist(c[0],c[-1])
@@ -91,7 +91,7 @@ def render(path,output):
         text(ox+12,oy+169,f"Crotch curve: {lens['crotch_curve']:.2f}",13)
         text(ox+12,oy+193,f"Full rise seam: {lens['full_rise_seam']:.2f}",13)
         text(ox+12,oy+217,'(waist edge to crotch tip)',11)
-        text(ox+12,oy+260,'Grain parallel to side seam',11)
+        text(ox+12,oy+260,'Grain parallel to upper side',11)
     text(905,132,'SIZING CHECK',20)
     summary=[('Body waist / hip',f"{v['waist']:.0f} / {v['hip']:.0f}"),('Finished shell hip',f"{v['hip_finished']:.2f}"),
              ('Shell waist opening',f"{2*(measures['F']['waist']+measures['B']['waist']):.2f}"),

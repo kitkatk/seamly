@@ -12,8 +12,8 @@ All dimensions are centimetres. Rise seam lengths follow the centre seam from sh
 | Waist edge, including its slope | **16.00** | **18.00** |
 | Horizontal hip width | **16.50** | **18.00** |
 | Hem width | **12.80** | **12.80** |
-| Side seam, derived to match | **38.03** | **38.03** |
-| Inseam, derived to match | **22.21** | **22.21** |
+| Main-fabric side seam | **40.00** | **40.00** |
+| Inseam, derived to match | **24.10** | **24.10** |
 | Straight upper centre | 8.02 | 10.00 |
 | Crotch curve alone | 9.98 | 13.50 |
 
@@ -22,7 +22,7 @@ Front and back are each cut as a mirrored pair. These piece dimensions give:
 - Full shell waist: **68 cm**, gathered into ribbing.
 - Full shell hip: **69 cm**; 14 cm ease over the supplied 55 cm body hip.
 - Shell opening per leg: **25.6 cm**, gathered into a cuff.
-- Developed side length including both rib bands: **44.03 cm**.
+- Developed side length including both rib bands: **46.00 cm**.
 - Front vertical crotch-tip depth from shell side waist: 16.78 cm (19.78 cm including waistband).
 - Back vertical crotch-tip depth from shell side waist: 18.56 cm; centre-back waist is raised 2 cm above the side waist.
 
@@ -40,12 +40,17 @@ In the Variables table, edit these primary design inputs:
 - `#front_waist`, `#back_waist`: piece waist edge lengths, including slope.
 - `#front_width`, `#back_width`: piece hip widths.
 - `#hem_width`: width at the hem of **each** piece; `#hem` is the derived full leg opening.
+- `#shell_length`: main-fabric side seam excluding both bands.
 - `#hip_depth`, `#back_raise`: hip reference level and centre-back waist raise.
 - `#band_height`, `#cuff_height`, `#waist_ratio`, `#ankle`, `#cuff_ease`, `#sa`: ribbing and seam allowances.
 
 The new construction uses a calibrated cubic shape scaled by its required arc length. The arc and straight upper-centre lengths therefore sum to the requested rise **inside Seamly2D**, including after editing the rise targets. The default crotch extensions remain 2.75 cm front and 5.5 cm back. Do not edit the `#front_shape_*` / `#back_shape_*` calibration ratios unless changing the construction method.
 
-The common side length is solved from equality of the front and back inseams. It is not independently fixed at 38 cm. The two crotch tips must be at different depths, and the derived hem must lie below both tips. This coupled solve is sensitive: even a 1 cm rise or width edit can change the derived leg length substantially while the seams still match. Always inspect `#shell_length` and the developed total length after editing any target. Seam-length consistency alone does not establish useful proportions. Large changes can create an unsuitable or invalid draft; check the whole outline. Size 86 is the baseline label, not automatic grading.
+The main-fabric side seam is independently set by `#shell_length`, now **40 cm**. The front lower leg remains straight and vertical at the outer side. The back lower leg is balanced using the nearby intersection of two construction circles: one fixes the 32 cm side below the 8 cm hip reference, the other fixes the inseam to the front's 24.1039 cm. The back outer hem shifts sideways by about −0.328 cm and sits at depth 39.9983 cm. Each back side still walks to exactly 8 + 32 = 40 cm; its hem remains horizontal and 12.8 cm wide.
+
+This tiny lower-leg shift preserves the earlier rise, waist and hip dimensions while matching both side seams and inseams. Match the 8 cm hip reference marks when sewing the side seams. Grain remains vertical, parallel to the **upper side** construction line; the back lower side is slightly angled (about 0.586°). The annotations report walked side length via the hip reference, rather than the direct waist-to-hem chord.
+
+Editing `#shell_length` adjusts leg length without recalculating the requested rise targets. Always check the resulting outlines: some combinations may give construction circles with no valid intersection, an inverted lower leg, or unsuitable proportions. The selected circle-intersection branch is the nearby lower hem for this baseline; do not assume it remains suitable across arbitrary changes.
 
 The former `#crotch_drop`, `#rise_ease`, and `#leg_ease` controls have been replaced by the explicit seam targets. `#outseam` and `#inseam` are body references, not the garment seam lengths. `#hip_ease` is now calculated from the specified piece hip widths.
 
@@ -59,8 +64,8 @@ Seamly2D generates **1 cm seam allowance on every edge** by default. Do not add 
 
 | Piece | Cut | Fabric / raw dimensions |
 |---|---|---|
-| Front | 2 mirrored | Main fabric, grain parallel to side seam |
-| Back | 2 mirrored | Main fabric, grain parallel to side seam |
+| Front | 2 mirrored | Main fabric, grain parallel to upper side construction line |
+| Back | 2 mirrored | Main fabric, grain parallel to upper side construction line |
 | Waistband | 1 rectangle | Ribbing **49 × 8 cm**, allowances included |
 | Cuff | 2 rectangles | Ribbing **20 × 8 cm** each, allowances included |
 
@@ -77,7 +82,7 @@ Try basted loops on the child. Gather the shell first if firm ribbing cannot str
 
 ## Assembly and fitting
 
-Mark grain, front/back identity, hip reference and rib folds. Sew each front to its corresponding back at the side and inseam. Both sides are 38.03 cm and both inseams are 22.21 cm on the stitching lines. Sew the continuous crotch seam with the legs right sides together. Finish seam allowances to suit the fabric.
+Mark grain, front/back identity, hip reference and rib folds. Sew each front to its corresponding back at the side and inseam. Both sides are 40.00 cm and both inseams are 24.10 cm on the stitching lines. Sew the continuous crotch seam with the legs right sides together. Finish seam allowances to suit the fabric.
 
 Baste bands and check standing, sitting and squatting over the diaper and leggings. Check waist/hip passage, seat coverage, ankle/heel passage and ankle position. Mark matching quarter points, including side-seam positions; front/back waist widths differ. No fly, darts, pockets, elastic casings or reflective bands are included.
 

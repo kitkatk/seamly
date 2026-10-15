@@ -60,9 +60,10 @@ def check(path=PATTERN, schema=None):
     front=distance(names['FCrotch'],names['FInnerHem'])
     back=distance(names['BCrotch'],names['BInnerHem'])
     assert abs(front-back)<1e-8, 'Inseams do not match'
-    side_f=distance(names['FO'],names['FOuterHem'])
-    side_b=distance(names['BO'],names['BOuterHem'])
+    side_f=distance(names['FO'],names['FHipSide'])+distance(names['FHipSide'],names['FOuterHem'])
+    side_b=distance(names['BO'],names['BHipSide'])+distance(names['BHipSide'],names['BOuterHem'])
     assert abs(side_f-side_b)<1e-8
+    assert abs(side_f-variables['shell_length'])<1e-8, 'Shell side length target not met'
     assert side_f>variables['rise'] and side_f>variables['back_crotch_y'], 'Hem must be below crotch tips'
     hip=2*(distance(names['FHipSide'],names['FHip'])+distance(names['BHipSide'],names['BHip']))
     assert abs(hip-variables['hip']-variables['hip_ease'])<1e-8
