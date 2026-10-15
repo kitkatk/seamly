@@ -5,6 +5,8 @@ Base shapes and patterns for sewing pattern design.
 
 Open [the editable Seamly2D pattern](patterns/children_pants_86/children_pants_86.sm2d) with **File → Open** in Seamly2D. This is a native formula-driven `.sm2d` file, not an SVG tracing. No separate measurements file is required. See the [pattern instructions](patterns/children_pants_86/README.md) before cutting.
 
+- [Dimensioned review sheet (PDF)](patterns/children_pants_86/annotated_dimensions.pdf)
+- [Dimensioned review sheet (PNG)](patterns/children_pants_86/annotated_dimensions.png)
 - [SVG preview](patterns/children_pants_86/preview.svg)
 - [Calculated dimensions](patterns/children_pants_86/dimensions.json)
 
@@ -19,7 +21,7 @@ python -m venv .venv
 .venv/bin/python scripts/check_pattern.py
 ```
 
-The only Python dependency is `lxml`, pinned in `requirements.txt`. Generation uses the standard library. **Regeneration replaces the supplied pattern and discards any direct Seamly2D edits to that file**; save your adjusted version under a different filename first.
+Python dependencies are pinned in `requirements.txt`: `lxml` for XML checking and `CairoSVG` for dimensioned SVG/PNG/PDF output. CairoSVG also requires the system Cairo library (for example, `libcairo2` on Debian/Ubuntu or `brew install cairo` on macOS). Generation uses the standard library. **Regeneration replaces the supplied pattern and discards any direct Seamly2D edits to that file**; save your adjusted version under a different filename first.
 
 ```sh
 .venv/bin/python scripts/draft_pants.py
@@ -29,3 +31,15 @@ The only Python dependency is `lxml`, pinned in `requirements.txt`. Generation u
 Edit `VARIABLES` in the generator for a regenerated baseline, or use Seamly2D's Variables table for interactive changes. The checker evaluates the generated file itself and checks hip ease, side length, matching inseams, object references, and seam allowances. It writes `dimensions.json`. Optionally validate the native XML against the upstream `src/libs/ifc/schema/pattern/v0.7.5.xsd` with `--schema PATH`.
 
 Native load and SVG/PNG exports were also verified using the official Seamly2D Linux release **v2026.10.12.200**, with Xvfb for headless operation. Seamly2D is a desktop application, not a pip dependency; obtain desktop releases from https://github.com/FashionFreedom/Seamly2D/releases. No web server is needed.
+
+### Dimensioned sketch
+
+```sh
+.venv/bin/python scripts/annotate_pattern.py
+# To inspect a locally adjusted copy without replacing its native file:
+.venv/bin/python scripts/annotate_pattern.py --pattern /path/to/children_pants_86.sm2d --output /path/to/review
+```
+
+The script reads the actual native XML and renders contour seam lengths, curve lengths, hip widths, rib cutting dimensions and sizing totals to `annotated_dimensions.svg`, `.png`, `.pdf`, and `seam_lengths.json`. It supports this draft's existing centimetre-based endLine point and simpleInteractive Bezier construction; it stops on unsupported geometry. It does not modify the native pattern. The sheets are snapshots: regenerate after changing measurements or curve handles. They are sizing references, not cutting layouts.
+
+In Seamly2D Draft mode, hover over a drawn line or curve for its length, or open **Measurements → Variables table → Line lengths / Curve lengths**. There is no verified automatic persistent dimension-overlay option.

@@ -72,3 +72,11 @@ Ribbing rectangles are full lengths, not pieces cut on the fold. Greatest stretc
 ## Validation
 
 `dimensions.json` records evaluated values from the actual native file. Python checks verify all four pieces, unique/referenced object IDs, formula evaluation, 65 cm hip, 44 cm total developed side length, equal side and inseams, and seam allowances. The XML also passed the official v0.7.5 schema. Seamly2D v2026.10.12.200 successfully loaded the file and exported all pieces to SVG and PNG. The preview is its native export. Digital checks establish file and drafting consistency; physical fit remains to be tested.
+
+## Dimensioned review sketch
+
+Open [the annotated PDF](annotated_dimensions.pdf), [PNG](annotated_dimensions.png), or [SVG](annotated_dimensions.svg) to see the actual evaluated seam and curve lengths beside the pattern. Values are centimetres; shell dimensions are stitching-line lengths, excluding seam allowance. Rib rectangles explicitly show cutting dimensions including allowances. Numerical values are also in [seam_lengths.json](seam_lengths.json).
+
+The front crotch curve is 9.26 cm and its straight upper centre is 8.00 cm, giving a 17.26 cm front rise seam. The back curve is 12.52 cm plus 10.00 cm straight upper centre, giving a 22.52 cm back rise seam. Those sums exclude the waistband and are different from the vertical rise. Curve lengths are numerically integrated along the cubic Bezier read from the native file, with integration convergence checked.
+
+These are static review sheets of this repository revision. Regenerate them with `scripts/annotate_pattern.py` after editing the `.sm2d`; see the repository README for commands. The native pattern is unchanged by annotation.

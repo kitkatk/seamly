@@ -1,2 +1,5 @@
 # Validation of native Seamly2D XML against its upstream schema.
 lxml==6.0.2
+
+# Render dimensioned pattern review sheets to PNG and PDF.
+CairoSVG==2.8.2
