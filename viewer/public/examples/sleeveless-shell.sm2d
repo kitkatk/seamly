@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<pattern>
+  <version>0.7.5</version>
+  <unit>cm</unit>
+  <description>Sleeveless shell &#183; assembly example</description>
+  <notes>Synthetic demonstration pattern and body measurements. Assembly placements and seam connections are supplied with the demo. Not a production sewing pattern.</notes>
+  <body-measurements>
+    <m name="height" value="170" />
+    <m name="bust_circ" value="92" />
+    <m name="waist_circ" value="76" />
+    <m name="hip_circ" value="98" />
+  </body-measurements>
+  <draftBlock name="Front">
+    <calculation>
+      <point id="1" type="single" name="F1" x="0" y="0" />
+      <point id="2" type="single" name="F2" x="7" y="1" />
+      <point id="3" type="single" name="F3" x="11" y="6" />
+      <point id="4" type="single" name="F4" x="15" y="7" />
+      <point id="5" type="single" name="F5" x="19" y="6" />
+      <point id="6" type="single" name="F6" x="23" y="1" />
+      <point id="7" type="single" name="F7" x="30" y="0" />
+      <point id="8" type="single" name="F8" x="32" y="9" />
+      <point id="9" type="single" name="F9" x="37" y="18" />
+      <point id="10" type="single" name="F10" x="37" y="62" />
+      <point id="11" type="single" name="F11" x="-7" y="62" />
+      <point id="12" type="single" name="F12" x="-7" y="18" />
+      <point id="13" type="single" name="F13" x="-2" y="9" />
+    </calculation>
+    <modeling>
+      <point id="1001" idObject="1" type="modeling" />
+      <point id="1002" idObject="2" type="modeling" />
+      <point id="1003" idObject="3" type="modeling" />
+      <point id="1004" idObject="4" type="modeling" />
+      <point id="1005" idObject="5" type="modeling" />
+      <point id="1006" idObject="6" type="modeling" />
+      <point id="1007" idObject="7" type="modeling" />
+      <point id="1008" idObject="8" type="modeling" />
+      <point id="1009" idObject="9" type="modeling" />
+      <point id="1010" idObject="10" type="modeling" />
+      <point id="1011" idObject="11" type="modeling" />
+      <point id="1012" idObject="12" type="modeling" />
+      <point id="1013" idObject="13" type="modeling" />
+    </modeling>
+    <pieces>
+      <piece id="1" name="Front">
+        <data quantity="1" />
+        <nodes>
+          <node idObject="1001" type="NodePoint" />
+          <node idObject="1002" type="NodePoint" />
+          <node idObject="1003" type="NodePoint" />
+          <node idObject="1004" type="NodePoint" />
+          <node idObject="1005" type="NodePoint" />
+          <node idObject="1006" type="NodePoint" />
+          <node idObject="1007" type="NodePoint" />
+          <node idObject="1008" type="NodePoint" />
+          <node idObject="1009" type="NodePoint" />
+          <node idObject="1010" type="NodePoint" />
+          <node idObject="1011" type="NodePoint" />
+          <node idObject="1012" type="NodePoint" />
+          <node idObject="1013" type="NodePoint" />
+        </nodes>
+      </piece>
+    </pieces>
+  </draftBlock>
+  <draftBlock name="Back">
+    <calculation>
+      <point id="101" type="single" name="B1" x="0" y="0" />
+      <point id="102" type="single" name="B2" x="7" y="1" />
+      <point id="103" type="single" name="B3" x="11" y="6" />
+      <point id="104" type="single" name="B4" x="15" y="7" />
+      <point id="105" type="single" name="B5" x="19" y="6" />
+      <point id="106" type="single" name="B6" x="23" y="1" />
+      <point id="107" type="single" name="B7" x="30" y="0" />
+      <point id="108" type="single" name="B8" x="32" y="9" />
+      <point id="109" type="single" name="B9" x="37" y="18" />
+      <point id="110" type="single" name="B10" x="37" y="62" />
+      <point id="111" type="single" name="B11" x="-7" y="62" />
+      <point id="112" type="single" name="B12" x="-7" y="18" />
+      <point id="113" type="single" name="B13" x="-2" y="9" />
+    </calculation>
+    <modeling>
+      <point id="1101" idObject="101" type="modeling" />
+      <point id="1102" idObject="102" type="modeling" />
+      <point id="1103" idObject="103" type="modeling" />
+      <point id="1104" idObject="104" type="modeling" />
+      <point id="1105" idObject="105" type="modeling" />
+      <point id="1106" idObject="106" type="modeling" />
+      <point id="1107" idObject="107" type="modeling" />
+      <point id="1108" idObject="108" type="modeling" />
+      <point id="1109" idObject="109" type="modeling" />
+      <point id="1110" idObject="110" type="modeling" />
+      <point id="1111" idObject="111" type="modeling" />
+      <point id="1112" idObject="112" type="modeling" />
+      <point id="1113" idObject="113" type="modeling" />
+    </modeling>
+    <pieces>
+      <piece id="2" name="Back">
+        <data quantity="1" />
+        <nodes>
+          <node idObject="1101" type="NodePoint" />
+          <node idObject="1102" type="NodePoint" />
+          <node idObject="1103" type="NodePoint" />
+          <node idObject="1104" type="NodePoint" />
+          <node idObject="1105" type="NodePoint" />
+          <node idObject="1106" type="NodePoint" />
+          <node idObject="1107" type="NodePoint" />
+          <node idObject="1108" type="NodePoint" />
+          <node idObject="1109" type="NodePoint" />
+          <node idObject="1110" type="NodePoint" />
+          <node idObject="1111" type="NodePoint" />
+          <node idObject="1112" type="NodePoint" />
+          <node idObject="1113" type="NodePoint" />
+        </nodes>
+      </piece>
+    </pieces>
+  </draftBlock>
+</pattern>
