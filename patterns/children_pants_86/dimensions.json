@@ -1,0 +1,23 @@
+{
+  "hip_circumference_cm": 65.0,
+  "shell_waist_circumference_cm": 65.238,
+  "finished_side_length_cm": 44.0,
+  "matching_inseam_seam_length_cm": 22.94,
+  "extra_rise_ease_cm": 1,
+  "extra_leg_blousing_cm": 2,
+  "shell_side_seam_cm": 38.0,
+  "front_crotch_depth_from_finished_side_waist_cm": 19,
+  "upper_thigh_circumference_at_tips_cm": 40.75,
+  "shell_leg_opening_cm": 24,
+  "waist_rib_cut_cm": [
+    49.0,
+    8
+  ],
+  "cuff_rib_cut_cm": [
+    20,
+    8
+  ],
+  "waist_rib_stretch_to_attach_percent": 38.8,
+  "waist_rib_stretch_to_pass_body_hip_percent": 17.0,
+  "cuff_rib_stretch_to_attach_percent": 33.3
+}

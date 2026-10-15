@@ -1,0 +1,2 @@
+# Validation of native Seamly2D XML against its upstream schema.
+lxml==6.0.2
