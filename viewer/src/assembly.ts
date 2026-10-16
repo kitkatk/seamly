@@ -3,6 +3,7 @@ import type { Piece, Point } from './pattern';
 export type Placement = {
   id: string; pieceId: string; name: string; mirrored: boolean;
   position: [number, number, number]; rotation: [number, number, number]; wrap: number;
+  arranged?: boolean;
 };
 export type EdgeRef = { instance: string; edge: number };
 export type Seam = { id: string; a: EdgeRef; b: EdgeRef; reverse: boolean };
@@ -91,6 +92,7 @@ export function validateAssembly(value: unknown, pieces: Piece[]): Assembly {
     ids.add(instance.id);
     for (const vector of [instance.position, instance.rotation]) if (!Array.isArray(vector) || vector.length !== 3 || vector.some(v => !Number.isFinite(v) || Math.abs(v) > 100000)) throw new Error('Invalid assembly placement.');
     if (!Number.isFinite(instance.wrap) || Math.abs(instance.wrap) > 359) throw new Error('Invalid wrap angle.');
+    if (instance.arranged !== undefined && typeof instance.arranged !== 'boolean') throw new Error('Invalid piece placement status.');
   }
   const used = new Set<string>(), seamIds = new Set<string>();
   for (const seam of data.seams) {

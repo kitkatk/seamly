@@ -19,17 +19,54 @@ npm run build    # TypeScript check and production bundle
 npm run preview  # serve the production bundle locally
 ```
 
-## Load a pattern and assemble it
+## Assemble a pattern for the first time
 
-1. Open or drop a `.sm2d` file. The **Pieces** view shows the source outlines and import notices. Unsupported constructions are reported and affected pieces are omitted.
-2. If the pattern references external body measurements, load the corresponding `.smis` file. Geometry is recalculated using those values, with unit conversion. The referenced path is shown as a hint; browsers cannot read another local file without the user selecting it.
-3. Use **Add a cut copy** for each physical panel. The source's cut quantity is shown as a guide. Copies are added explicitly: a quantity does not specify which copies need mirroring. Mark **Mirror pattern horizontally** where needed. For on-fold pieces, create a mirrored copy and join the fold edges; automatic fold expansion is not implemented.
-4. Set each copy's **position** in millimetres and **rotation** in degrees. Y points up; positive Z faces the initial camera. Use **Initial curvature** to wrap panels around the body before joining their edges. Select a copy in the list or the canvas to see its numbered edges. Use **Assembly** to inspect placements and **Pieces** for source shapes.
-5. Choose **Add** under Seam connections, then select the two sewn edges. Reverse the second edge when the endpoints should match in the opposite order. Orange connector lines show the pairing before sewing. Each edge can belong to one seam; self-seams between different edges of the same copy are allowed.
-6. Choose **Preview sewn shape** to close the supplied seams. **Edit placements** returns to the initial layout. Unconnected edges remain open. The mean seam gap is displayed to help identify poorly converged connections.
-7. **Save setup** downloads a `.assembly.json` containing cut copies, mirroring, placement and seams. Reopen the original pattern, load its measurements if needed, then **Load setup** to reuse it. Assembly IDs must match the pattern's piece IDs. There is no automatic persistence.
+Choose **Open a .sm2d pattern**, or **Try the guided example** if you want to learn with a simple sleeveless top. The example now starts unassembled and explains each step. It includes synthetic body measurements and is not a production sewing pattern.
 
-The included **Explore the example** loads a synthetic sleeveless-shell pattern with its assembly supplied. Its body measurements are demonstration values, not a production size specification.
+The four steps stay visible across the top. Each step explains the current task and has a next action at the bottom of its panel. You can revisit completed steps without starting again.
+
+### 1. Prepare pieces
+
+Check the number of fabric pieces to cut from each pattern template. The suggested quantities come from the pattern. Choose **Make mirrored left/right pairs** when your cutting instructions require opposite copies, then **Create fabric pieces**. You can also mirror individual pieces in the next step.
+
+Changing quantities later retains the identities, positions and seams of copies that remain. Removing a copy also removes its seams; Undo can restore it. Quantity changes must be applied with **Update pieces & continue** before moving on.
+
+For on-fold pieces, create two copies, mirror one, and join the fold edges. Automatic fold expansion is not implemented.
+
+If no outlines can be imported, the step explains how to load referenced measurements or review the import notices under **Pattern details, fabric & measurements**. Unsupported construction tools are still reported; this UX update does not extend the drafting engine.
+
+### 2. Arrange in 3D
+
+Select a fabric piece from the list, the flat view, or the 3D view. Choose **Front**, **Back**, **Left side**, **Right side** or **Keep flat** to give it a starting position. These are approximate positions around the garment centre, not automatic placement on an avatar. The front is nearest the camera in **Front** view; left and right refer to that view.
+
+Drag the coloured arrows in 3D to move the selected piece, or use the directional buttons for 2 cm steps. **Curve around the garment** bends the piece before joining. **Fine-tune position & rotation** contains names, numeric millimetre positions and degree rotations; it is optional. You can also choose **Use the current position** to confirm a custom arrangement.
+
+The checklist tracks which pieces have a starting position. Choose **Position next piece** until every piece is positioned, then **Continue to join edges**. In the example, put Front at the front and Back at the back.
+
+### 3. Join edges
+
+Keep the flat outlines and 3D view side by side:
+
+1. Click a flat outline edge to select side **A**.
+2. Click its matching edge to select side **B**. Keyboard users can focus an edge and press Enter or Space; an edge-list alternative is also available.
+3. Check the displayed lengths and the numbered ends **A1/A2** and **B1/B2**. The 3D stitch lines preview the match. **Swap ends** changes which endpoints meet. A length warning helps spot a mismatch but permits intentional easing or gathering.
+4. Choose **Save this seam**, then repeat for the next pair. The primary action stays visible at the bottom of the step panel.
+
+The example's **Show me these two edges** selects the next side or shoulder seam for you to inspect and save; it never saves a seam automatically. Leave necklines, armholes, hems and other openings unjoined.
+
+Joined edges share a colour. Click one or choose a seam in **Saved seams** to review it, swap its ends or remove it. Each edge can belong to one seam. Different edges of the same fabric piece may be joined to make a tube. Escape cancels a pending selection. Undo/Redo, including Command/Ctrl Z and Command/Ctrl Shift Z, recover assembly edits.
+
+### 4. Preview & save
+
+**Preview joined shape** closes the supplied seams. Look around the garment; **Show before joining** compares it with the starting arrangement. The review identifies pieces with no seams and counts edges left open, so you can check whether those openings are intentional. It does not assume that every edge should be sewn or declare a garment complete just because every piece has a seam.
+
+Return to **Join edges** for a twisted seam, or **Arrange in 3D** for a misplaced piece. **How accurate is this preview?** explains the geometry limits and shows the mean seam gap.
+
+Choose **Download assembly** to keep your work as a `.assembly.json` file. **Save progress** also works during earlier steps; finish or cancel any pending edge selection first. Keep this file with the original `.sm2d` and any `.smis` measurements. To continue later, reopen the pattern, load its measurements if needed, then choose **Open saved assembly**. The appropriate step is selected automatically. Existing version-1 assembly files remain compatible.
+
+There is no automatic persistence. The app displays unsaved changes and asks before discarding an unsaved assembly when opening another pattern or saved setup. Downloading a setup starts a browser download; make sure to keep the downloaded file.
+
+See [the UX rationale and research references](docs/assembly-ux.md) for the interaction choices behind the guided flow.
 
 ## Measurements and drafting variables
 

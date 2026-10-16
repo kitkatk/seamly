@@ -4,7 +4,7 @@ Base shapes and patterns for sewing pattern design.
 
 ## Local 3D pattern viewer
 
-A browser-local Seamly viewer lives in [`viewer/`](viewer/). It includes an orbitable 3D scene, manual garment assembly, two fabric presets, body measurement tables and pattern variable tables. Files are parsed in the browser; nothing is uploaded.
+A browser-local Seamly viewer lives in [`viewer/`](viewer/). It includes an orbitable 3D scene, guided garment assembly, two fabric presets, body measurement tables and pattern variable tables. Files are parsed in the browser; nothing is uploaded.
 
 Requires Node.js **20.19+ or 22.12+** and a current WebGL-capable browser.
 
