@@ -60,8 +60,24 @@ def check(path=PATTERN, schema=None):
     front=distance(names['FCrotch'],names['FInnerHem'])
     back=distance(names['BCrotch'],names['BInnerHem'])
     assert abs(front-back)<1e-8, 'Inseams do not match'
-    side_f=distance(names['FSideWaist'],names['FHipSide'])+distance(names['FHipSide'],names['FOuterHem'])
-    side_b=distance(names['BSideWaist'],names['BHipSide'])+distance(names['BHipSide'],names['BOuterHem'])
+    from annotate_pattern import curve_length
+    side_lengths={};side_angles={}
+    for pre in ('F','B'):
+        side=next(c for c in curves.values() if math.dist(c[0],names[pre+'SideWaist'])<1e-8)
+        upper=curve_length(side)
+        assert abs(upper-curve_length(side,512))<1e-6, 'Side curve integration did not converge'
+        tangent=(side[1][0]-side[0][0],side[1][1]-side[0][1])
+        waist=(names[pre+'Waist'][0]-side[0][0],names[pre+'Waist'][1]-side[0][1])
+        dot=sum(a*b for a,b in zip(tangent,waist))/(math.hypot(*tangent)*math.hypot(*waist))
+        assert abs(dot)<1e-10, 'Waist/side junction is not square'
+        side_angles[pre]=math.degrees(math.acos(max(-1,min(1,dot))))
+        end=(side[3][0]-side[2][0],side[3][1]-side[2][1])
+        lower=(names[pre+'OuterHem'][0]-side[3][0],names[pre+'OuterHem'][1]-side[3][1])
+        assert abs(end[0]*lower[1]-end[1]*lower[0])/(math.hypot(*end)*math.hypot(*lower))<1e-10, 'Hip transition has a corner'
+        assert sum(a*b for a,b in zip(end,lower))>0, 'Hip transition reverses direction'
+        assert all(side[i+1][1]>side[i][1] for i in range(3)), 'Side curve may fold or cusp'
+        side_lengths[pre]=upper+distance(names[pre+'HipSide'],names[pre+'OuterHem'])
+    side_f=side_lengths['F'];side_b=side_lengths['B']
     assert abs(side_f-side_b)<1e-8
     assert abs(side_f-variables['shell_length'])<1e-8, 'Shell side length target not met'
     assert side_f>variables['rise'] and side_f>variables['back_crotch_y'], 'Hem must be below crotch tips'
@@ -92,6 +108,8 @@ def check(path=PATTERN, schema=None):
         'back_hip_width_cm':variables['back_width'],
         'hem_width_each_piece_cm':variables['hem_width'],
         'shell_side_seam_cm':round(side_f,3),
+        'front_waist_side_angle_degrees':round(side_angles['F'],6),
+        'back_waist_side_angle_degrees':round(side_angles['B'],6),
         'front_crotch_depth_from_finished_side_waist_cm':variables['rise']+variables['band_height'],
         'upper_thigh_circumference_at_tips_cm':round(variables['front_width']+variables['front_ext']+variables['back_width']+variables['back_ext'],3),
         'shell_leg_opening_cm':variables['hem'],

@@ -3,7 +3,7 @@
   <version>0.7.5</version>
   <unit>cm</unit>
   <description>Size 86 roomy overtrousers; original draft; cut front/back mirrored pairs. Folded rib waistband and cuffs. Fit sample required.</description>
-  <notes>All inputs in Variables. No external measurement file. User revised seam targets: front/back rise 18/23.5, waist 14.5/16.5 (62 cm total), side-only take-in 1.5 cm per piece, hip width 16.5/18, each piece hem 12.8 cm. Main fabric sides fixed at 40 cm; lower back leg balanced to match inseams. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.</notes>
+  <notes>All inputs in Variables. No external measurement file. User revised seam targets: front/back rise 18/23.5, waist 14.5/16.5 (62 cm total), side-only take-in 1.5 cm per piece, hip width 16.5/18, each piece hem 12.8 cm. Smooth side curves squared to waist edges. Main fabric sides fixed at 40 cm; lower back leg balanced to match inseams. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.</notes>
   <measurements />
   <variables>
     <variable name="#size" formula="86" description="Nominal height size; label only, not automatic grading" />
@@ -52,8 +52,8 @@
     <variable name="#front_side_x" formula="#waist_take_in" description="New front side waist, centre front unchanged" />
     <variable name="#back_side_x" formula="#back_waist_x*#waist_take_in/(#back_waist+#waist_take_in)" description="New back side waist, measured along original waist edge" />
     <variable name="#back_side_y" formula="-#back_raise*#waist_take_in/(#back_waist+#waist_take_in)" description="Back side waist elevation after side-only take-in" />
-    <variable name="#front_upper_side" formula="sqrt(#front_side_x^2+#hip_depth^2)" description="Front shaped side from waist to hip" />
-    <variable name="#back_upper_side" formula="sqrt(#back_side_x^2+(#hip_depth-#back_side_y)^2)" description="Back shaped side from waist to hip" />
+    <variable name="#front_upper_side" formula="8.16628834458304" description="Calibrated smooth waist-to-hip side curve length; regenerate after geometry edits" />
+    <variable name="#back_upper_side" formula="8.34776818130043" description="Calibrated smooth waist-to-hip side curve length; regenerate after geometry edits" />
     <variable name="#front_hem_y" formula="#hip_depth+#shell_length-#front_upper_side" description="Front hem position, maintaining walked side length" />
     <variable name="#front_inseam_length" formula="sqrt((#front_hem_y-#rise)^2+#front_run^2)" description="Straight front inseam length" />
     <variable name="#back_lower_side" formula="#shell_length-#back_upper_side" description="Back side length below hip reference" />
@@ -65,6 +65,8 @@
     <variable name="#back_hem_y" formula="#hip_depth+(#back_circle_a*#back_circle_dy+#back_circle_h*#back_run)/#back_circle_distance" description="Back hem vertical position" />
     <variable name="#band_length" formula="#waist*#waist_ratio" description="Finished relaxed waistband loop, provisional" />
     <variable name="#cuff_length" formula="#ankle+#cuff_ease" description="Finished relaxed cuff loop, provisional" />
+    <variable name="#back_side_start_angle" formula="276.379370208443" description="Square side tangent to back waist; regenerate after geometry edits" />
+    <variable name="#back_side_end_angle" formula="88.8161998189151" description="Smooth tangent into lower back side; regenerate after geometry edits" />
   </variables>
   <draftBlock name="Front - cut 2 mirrored">
     <calculation>
@@ -89,8 +91,8 @@
       <line id="19" firstPoint="9" secondPoint="11" lineType="solidLine" lineColor="black" />
       <line id="20" firstPoint="11" secondPoint="13" lineType="solidLine" lineColor="black" />
       <line id="21" firstPoint="13" secondPoint="16" lineType="solidLine" lineColor="black" />
-      <line id="22" firstPoint="16" secondPoint="3" lineType="solidLine" lineColor="black" />
-      <line id="23" firstPoint="16" secondPoint="7" lineType="dashLine" lineColor="black" />
+      <line id="22" firstPoint="16" secondPoint="7" lineType="dashLine" lineColor="black" />
+      <spline id="23" type="simpleInteractive" point1="3" point4="16" angle1="270" angle2="90" length1="#hip_depth/3" length2="#hip_depth/3" color="black" penStyle="solidLine" />
       <point id="24" type="endLine" name="FGrainTopX" basePoint="1" angle="0" length="#hem/4" lineType="none" lineColor="black" mx=".2" my=".2" />
       <point id="25" type="endLine" name="FGrainTop" basePoint="24" angle="270" length="#rise" lineType="none" lineColor="black" mx=".2" my=".2" />
       <point id="26" type="endLine" name="FGrainBottomX" basePoint="1" angle="0" length="#hem/4" lineType="none" lineColor="black" mx=".2" my=".2" />
@@ -106,9 +108,10 @@
       <point id="34" idObject="11" type="modeling" inUse="true" mx=".2" my=".2" />
       <point id="35" idObject="13" type="modeling" inUse="true" mx=".2" my=".2" />
       <point id="36" idObject="16" type="modeling" inUse="true" mx=".2" my=".2" />
+      <spline id="37" idObject="23" type="modelingSpline" inUse="true" />
     </modeling>
     <pieces>
-      <piece id="37" version="2" name="Front - cut 2 mirrored" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
+      <piece id="38" version="2" name="Front - cut 2 mirrored" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
         <data visible="true" fontSize="10" mx="7" my="11" width="10" height="5" rotation="0" quantity="2" onFold="false">
           <line text="Front - cut 2 mirrored" />
           <line text="Size 86 / cm" />
@@ -126,53 +129,55 @@
           <node idObject="34" type="NodePoint" />
           <node idObject="35" type="NodePoint" />
           <node idObject="36" type="NodePoint" />
+          <node idObject="37" type="NodeSpline" reverse="1" />
         </nodes>
       </piece>
     </pieces>
   </draftBlock>
   <draftBlock name="Back - cut 2 mirrored">
     <calculation>
-      <point id="38" type="single" name="BO" x="35" y="8" mx=".2" my=".2" />
-      <point id="39" type="endLine" name="BSideWaistX" basePoint="38" angle="0" length="#back_side_x" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="40" type="endLine" name="BSideWaist" basePoint="39" angle="270" length="#back_side_y" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="41" type="endLine" name="BWaistX" basePoint="38" angle="0" length="#back_waist_x" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="42" type="endLine" name="BWaist" basePoint="41" angle="270" length="-(#back_raise)" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="43" type="endLine" name="BHipX" basePoint="38" angle="0" length="#back_width" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="44" type="endLine" name="BHip" basePoint="43" angle="270" length="#hip_depth" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="45" type="endLine" name="BCrotchX" basePoint="38" angle="0" length="#back_width+#back_ext" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="46" type="endLine" name="BCrotch" basePoint="45" angle="270" length="#back_crotch_y" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="47" type="endLine" name="BInnerHemX" basePoint="38" angle="0" length="#back_hem_x+#hem_width" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="48" type="endLine" name="BInnerHem" basePoint="47" angle="270" length="#back_hem_y" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="49" type="endLine" name="BOuterHemX" basePoint="38" angle="0" length="#back_hem_x" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="50" type="endLine" name="BOuterHem" basePoint="49" angle="270" length="#back_hem_y" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <spline id="51" type="simpleInteractive" point1="44" point4="46" angle1="270" angle2="180" length1="(#back_crotch_y-#hip_depth)*0.75" length2="#back_ext*0.7" color="black" penStyle="solidLine" />
-      <point id="52" type="endLine" name="BHipSideX" basePoint="38" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="53" type="endLine" name="BHipSide" basePoint="52" angle="270" length="#hip_depth" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <line id="54" firstPoint="40" secondPoint="42" lineType="solidLine" lineColor="black" />
-      <line id="55" firstPoint="42" secondPoint="44" lineType="solidLine" lineColor="black" />
-      <line id="56" firstPoint="46" secondPoint="48" lineType="solidLine" lineColor="black" />
-      <line id="57" firstPoint="48" secondPoint="50" lineType="solidLine" lineColor="black" />
-      <line id="58" firstPoint="50" secondPoint="53" lineType="solidLine" lineColor="black" />
-      <line id="59" firstPoint="53" secondPoint="40" lineType="solidLine" lineColor="black" />
-      <line id="60" firstPoint="53" secondPoint="44" lineType="dashLine" lineColor="black" />
-      <point id="61" type="endLine" name="BGrainTopX" basePoint="38" angle="0" length="#hem/4" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="62" type="endLine" name="BGrainTop" basePoint="61" angle="270" length="#rise" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="63" type="endLine" name="BGrainBottomX" basePoint="38" angle="0" length="#hem/4" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="64" type="endLine" name="BGrainBottom" basePoint="63" angle="270" length="#shell_length-2" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <line id="65" firstPoint="62" secondPoint="64" lineType="dashLine" lineColor="black" />
+      <point id="39" type="single" name="BO" x="35" y="8" mx=".2" my=".2" />
+      <point id="40" type="endLine" name="BSideWaistX" basePoint="39" angle="0" length="#back_side_x" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="41" type="endLine" name="BSideWaist" basePoint="40" angle="270" length="#back_side_y" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="42" type="endLine" name="BWaistX" basePoint="39" angle="0" length="#back_waist_x" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="43" type="endLine" name="BWaist" basePoint="42" angle="270" length="-(#back_raise)" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="44" type="endLine" name="BHipX" basePoint="39" angle="0" length="#back_width" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="45" type="endLine" name="BHip" basePoint="44" angle="270" length="#hip_depth" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="46" type="endLine" name="BCrotchX" basePoint="39" angle="0" length="#back_width+#back_ext" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="47" type="endLine" name="BCrotch" basePoint="46" angle="270" length="#back_crotch_y" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="48" type="endLine" name="BInnerHemX" basePoint="39" angle="0" length="#back_hem_x+#hem_width" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="49" type="endLine" name="BInnerHem" basePoint="48" angle="270" length="#back_hem_y" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="50" type="endLine" name="BOuterHemX" basePoint="39" angle="0" length="#back_hem_x" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="51" type="endLine" name="BOuterHem" basePoint="50" angle="270" length="#back_hem_y" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <spline id="52" type="simpleInteractive" point1="45" point4="47" angle1="270" angle2="180" length1="(#back_crotch_y-#hip_depth)*0.75" length2="#back_ext*0.7" color="black" penStyle="solidLine" />
+      <point id="53" type="endLine" name="BHipSideX" basePoint="39" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="54" type="endLine" name="BHipSide" basePoint="53" angle="270" length="#hip_depth" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <line id="55" firstPoint="41" secondPoint="43" lineType="solidLine" lineColor="black" />
+      <line id="56" firstPoint="43" secondPoint="45" lineType="solidLine" lineColor="black" />
+      <line id="57" firstPoint="47" secondPoint="49" lineType="solidLine" lineColor="black" />
+      <line id="58" firstPoint="49" secondPoint="51" lineType="solidLine" lineColor="black" />
+      <line id="59" firstPoint="51" secondPoint="54" lineType="solidLine" lineColor="black" />
+      <line id="60" firstPoint="54" secondPoint="45" lineType="dashLine" lineColor="black" />
+      <spline id="61" type="simpleInteractive" point1="41" point4="54" angle1="#back_side_start_angle" angle2="#back_side_end_angle" length1="(#hip_depth-#back_side_y)/3" length2="(#hip_depth-#back_side_y)/3" color="black" penStyle="solidLine" />
+      <point id="62" type="endLine" name="BGrainTopX" basePoint="39" angle="0" length="#hem/4" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="63" type="endLine" name="BGrainTop" basePoint="62" angle="270" length="#rise" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="64" type="endLine" name="BGrainBottomX" basePoint="39" angle="0" length="#hem/4" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="65" type="endLine" name="BGrainBottom" basePoint="64" angle="270" length="#shell_length-2" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <line id="66" firstPoint="63" secondPoint="65" lineType="dashLine" lineColor="black" />
     </calculation>
     <modeling>
-      <point id="66" idObject="40" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="67" idObject="42" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="68" idObject="44" type="modeling" inUse="true" mx=".2" my=".2" />
-      <spline id="69" idObject="51" type="modelingSpline" inUse="true" />
-      <point id="70" idObject="46" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="71" idObject="48" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="72" idObject="50" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="73" idObject="53" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="67" idObject="41" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="68" idObject="43" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="69" idObject="45" type="modeling" inUse="true" mx=".2" my=".2" />
+      <spline id="70" idObject="52" type="modelingSpline" inUse="true" />
+      <point id="71" idObject="47" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="72" idObject="49" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="73" idObject="51" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="74" idObject="54" type="modeling" inUse="true" mx=".2" my=".2" />
+      <spline id="75" idObject="61" type="modelingSpline" inUse="true" />
     </modeling>
     <pieces>
-      <piece id="74" version="2" name="Back - cut 2 mirrored" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
+      <piece id="76" version="2" name="Back - cut 2 mirrored" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
         <data visible="true" fontSize="10" mx="37" my="11" width="10" height="5" rotation="0" quantity="2" onFold="false">
           <line text="Back - cut 2 mirrored" />
           <line text="Size 86 / cm" />
@@ -182,45 +187,46 @@
         <patternInfo visible="false" />
         <grainline visible="true" mx="41" my="26" length="10" rotation="90" arrows="0" />
         <nodes>
-          <node idObject="66" type="NodePoint" />
           <node idObject="67" type="NodePoint" />
           <node idObject="68" type="NodePoint" />
-          <node idObject="69" type="NodeSpline" reverse="0" />
-          <node idObject="70" type="NodePoint" />
+          <node idObject="69" type="NodePoint" />
+          <node idObject="70" type="NodeSpline" reverse="0" />
           <node idObject="71" type="NodePoint" />
           <node idObject="72" type="NodePoint" />
           <node idObject="73" type="NodePoint" />
+          <node idObject="74" type="NodePoint" />
+          <node idObject="75" type="NodeSpline" reverse="1" />
         </nodes>
       </piece>
     </pieces>
   </draftBlock>
   <draftBlock name="Waist rib - cut 1">
     <calculation>
-      <point id="75" type="single" name="WO" x="5" y="52" mx=".2" my=".2" />
-      <point id="76" type="endLine" name="WEndX" basePoint="75" angle="0" length="#band_length" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="77" type="endLine" name="WEnd" basePoint="76" angle="270" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="78" type="endLine" name="WEndBottomX" basePoint="75" angle="0" length="#band_length" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="79" type="endLine" name="WEndBottom" basePoint="78" angle="270" length="2*#band_height" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="80" type="endLine" name="WBottomX" basePoint="75" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="81" type="endLine" name="WBottom" basePoint="80" angle="270" length="2*#band_height" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <line id="82" firstPoint="75" secondPoint="77" lineType="solidLine" lineColor="black" />
-      <line id="83" firstPoint="77" secondPoint="79" lineType="solidLine" lineColor="black" />
-      <line id="84" firstPoint="79" secondPoint="81" lineType="solidLine" lineColor="black" />
-      <line id="85" firstPoint="81" secondPoint="75" lineType="solidLine" lineColor="black" />
-      <point id="86" type="endLine" name="WFoldStartX" basePoint="75" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="87" type="endLine" name="WFoldStart" basePoint="86" angle="270" length="(2*#band_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="88" type="endLine" name="WFoldEndX" basePoint="75" angle="0" length="#band_length" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="89" type="endLine" name="WFoldEnd" basePoint="88" angle="270" length="(2*#band_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <line id="90" firstPoint="87" secondPoint="89" lineType="dashLine" lineColor="black" />
+      <point id="77" type="single" name="WO" x="5" y="52" mx=".2" my=".2" />
+      <point id="78" type="endLine" name="WEndX" basePoint="77" angle="0" length="#band_length" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="79" type="endLine" name="WEnd" basePoint="78" angle="270" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="80" type="endLine" name="WEndBottomX" basePoint="77" angle="0" length="#band_length" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="81" type="endLine" name="WEndBottom" basePoint="80" angle="270" length="2*#band_height" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="82" type="endLine" name="WBottomX" basePoint="77" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="83" type="endLine" name="WBottom" basePoint="82" angle="270" length="2*#band_height" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <line id="84" firstPoint="77" secondPoint="79" lineType="solidLine" lineColor="black" />
+      <line id="85" firstPoint="79" secondPoint="81" lineType="solidLine" lineColor="black" />
+      <line id="86" firstPoint="81" secondPoint="83" lineType="solidLine" lineColor="black" />
+      <line id="87" firstPoint="83" secondPoint="77" lineType="solidLine" lineColor="black" />
+      <point id="88" type="endLine" name="WFoldStartX" basePoint="77" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="89" type="endLine" name="WFoldStart" basePoint="88" angle="270" length="(2*#band_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="90" type="endLine" name="WFoldEndX" basePoint="77" angle="0" length="#band_length" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="91" type="endLine" name="WFoldEnd" basePoint="90" angle="270" length="(2*#band_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <line id="92" firstPoint="89" secondPoint="91" lineType="dashLine" lineColor="black" />
     </calculation>
     <modeling>
-      <point id="91" idObject="75" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="92" idObject="77" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="93" idObject="79" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="94" idObject="81" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="93" idObject="77" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="94" idObject="79" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="95" idObject="81" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="96" idObject="83" type="modeling" inUse="true" mx=".2" my=".2" />
     </modeling>
     <pieces>
-      <piece id="95" version="2" name="Waist rib - cut 1" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
+      <piece id="97" version="2" name="Waist rib - cut 1" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
         <data visible="true" fontSize="10" mx="7" my="55" width="10" height="5" rotation="0" quantity="1" onFold="false">
           <line text="Waist rib - cut 1" />
           <line text="Size 86 / cm" />
@@ -230,41 +236,41 @@
         <patternInfo visible="false" />
         <grainline visible="false" />
         <nodes>
-          <node idObject="91" type="NodePoint" />
-          <node idObject="92" type="NodePoint" />
           <node idObject="93" type="NodePoint" />
           <node idObject="94" type="NodePoint" />
+          <node idObject="95" type="NodePoint" />
+          <node idObject="96" type="NodePoint" />
         </nodes>
       </piece>
     </pieces>
   </draftBlock>
   <draftBlock name="Ankle rib - cut 2">
     <calculation>
-      <point id="96" type="single" name="CO" x="5" y="68" mx=".2" my=".2" />
-      <point id="97" type="endLine" name="CEndX" basePoint="96" angle="0" length="#cuff_length" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="98" type="endLine" name="CEnd" basePoint="97" angle="270" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="99" type="endLine" name="CEndBottomX" basePoint="96" angle="0" length="#cuff_length" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="100" type="endLine" name="CEndBottom" basePoint="99" angle="270" length="2*#cuff_height" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="101" type="endLine" name="CBottomX" basePoint="96" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="102" type="endLine" name="CBottom" basePoint="101" angle="270" length="2*#cuff_height" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <line id="103" firstPoint="96" secondPoint="98" lineType="solidLine" lineColor="black" />
-      <line id="104" firstPoint="98" secondPoint="100" lineType="solidLine" lineColor="black" />
-      <line id="105" firstPoint="100" secondPoint="102" lineType="solidLine" lineColor="black" />
-      <line id="106" firstPoint="102" secondPoint="96" lineType="solidLine" lineColor="black" />
-      <point id="107" type="endLine" name="CFoldStartX" basePoint="96" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="108" type="endLine" name="CFoldStart" basePoint="107" angle="270" length="(2*#cuff_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="109" type="endLine" name="CFoldEndX" basePoint="96" angle="0" length="#cuff_length" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <point id="110" type="endLine" name="CFoldEnd" basePoint="109" angle="270" length="(2*#cuff_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
-      <line id="111" firstPoint="108" secondPoint="110" lineType="dashLine" lineColor="black" />
+      <point id="98" type="single" name="CO" x="5" y="68" mx=".2" my=".2" />
+      <point id="99" type="endLine" name="CEndX" basePoint="98" angle="0" length="#cuff_length" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="100" type="endLine" name="CEnd" basePoint="99" angle="270" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="101" type="endLine" name="CEndBottomX" basePoint="98" angle="0" length="#cuff_length" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="102" type="endLine" name="CEndBottom" basePoint="101" angle="270" length="2*#cuff_height" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="103" type="endLine" name="CBottomX" basePoint="98" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="104" type="endLine" name="CBottom" basePoint="103" angle="270" length="2*#cuff_height" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <line id="105" firstPoint="98" secondPoint="100" lineType="solidLine" lineColor="black" />
+      <line id="106" firstPoint="100" secondPoint="102" lineType="solidLine" lineColor="black" />
+      <line id="107" firstPoint="102" secondPoint="104" lineType="solidLine" lineColor="black" />
+      <line id="108" firstPoint="104" secondPoint="98" lineType="solidLine" lineColor="black" />
+      <point id="109" type="endLine" name="CFoldStartX" basePoint="98" angle="0" length="0" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="110" type="endLine" name="CFoldStart" basePoint="109" angle="270" length="(2*#cuff_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="111" type="endLine" name="CFoldEndX" basePoint="98" angle="0" length="#cuff_length" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <point id="112" type="endLine" name="CFoldEnd" basePoint="111" angle="270" length="(2*#cuff_height)/2" lineType="none" lineColor="black" mx=".2" my=".2" />
+      <line id="113" firstPoint="110" secondPoint="112" lineType="dashLine" lineColor="black" />
     </calculation>
     <modeling>
-      <point id="112" idObject="96" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="113" idObject="98" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="114" idObject="100" type="modeling" inUse="true" mx=".2" my=".2" />
-      <point id="115" idObject="102" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="114" idObject="98" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="115" idObject="100" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="116" idObject="102" type="modeling" inUse="true" mx=".2" my=".2" />
+      <point id="117" idObject="104" type="modeling" inUse="true" mx=".2" my=".2" />
     </modeling>
     <pieces>
-      <piece id="116" version="2" name="Ankle rib - cut 2" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
+      <piece id="118" version="2" name="Ankle rib - cut 2" mx="0" my="0" closed="1" seamAllowance="true" width="#sa" inLayout="true" forbidFlipping="false">
         <data visible="true" fontSize="10" mx="7" my="71" width="10" height="5" rotation="0" quantity="2" onFold="false">
           <line text="Ankle rib - cut 2" />
           <line text="Size 86 / cm" />
@@ -274,10 +280,10 @@
         <patternInfo visible="false" />
         <grainline visible="false" />
         <nodes>
-          <node idObject="112" type="NodePoint" />
-          <node idObject="113" type="NodePoint" />
           <node idObject="114" type="NodePoint" />
           <node idObject="115" type="NodePoint" />
+          <node idObject="116" type="NodePoint" />
+          <node idObject="117" type="NodePoint" />
         </nodes>
       </piece>
     </pieces>

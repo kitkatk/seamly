@@ -13,7 +13,7 @@ All dimensions are centimetres. Rise seam lengths follow the centre seam from sh
 | Horizontal hip width | **16.50** | **18.00** |
 | Hem width | **12.80** | **12.80** |
 | Main-fabric side seam | **40.00** | **40.00** |
-| Inseam, derived to match | **23.97** | **23.97** |
+| Inseam, derived to match | **23.94** | **23.94** |
 | Straight upper centre | 8.02 | 10.00 |
 | Crotch curve alone | 9.98 | 13.50 |
 
@@ -47,13 +47,23 @@ In the Variables table, edit these primary design inputs:
 
 The new construction uses a calibrated cubic shape scaled by its required arc length. The arc and straight upper-centre lengths therefore sum to the requested rise **inside Seamly2D**, including after editing the rise targets. The default crotch extensions remain 2.75 cm front and 5.5 cm back. Do not edit the `#front_shape_*` / `#back_shape_*` calibration ratios unless changing the construction method.
 
-The waist reduction is taken entirely at the side seams: each of the four waist edges is shortened by 1.5 cm, giving `2 × (14.5 + 16.5) = 62 cm`. The new side waist points lie along the original waist edges and taper to the unchanged hip-side points. The original centre-waist, hip and crotch points, curve handles and rise lengths are preserved. The back waist slopes, so taking 1.5 cm along it also lifts its side endpoint by 0.167 cm.
+The waist reduction remains entirely at the sides: each of the four waist edges is shortened by 1.5 cm, giving `2 × (14.5 + 16.5) = 62 cm`. The original centre-waist, hip and crotch points, crotch handles and rise lengths are preserved. The back waist slopes, so taking 1.5 cm along it also lifts its side endpoint by 0.167 cm.
 
-`#shell_length` still fixes each walked main-fabric side at **40 cm**. The tapered waist-to-hip segments measure 8.1394 cm front and 8.3016 cm back. The lower-leg construction balances the remaining side lengths with matched 23.9696 cm inseams. The front hem is at depth 39.8606 cm from the original datum; the back outer hem is at x −0.6215 cm, depth 39.6923 cm. Both hems remain horizontal and 12.8 cm wide. The lower-leg adjustments keep the seam lengths matched rather than adding circumference.
+## Smooth side shaping and square waist corners
 
-The geometric hip crossings are construction references, **not matching assembly notches**: they differ by about 1.62 mm in walked distance from the shaped waist. For balance marks, measure the same distance down each side stitching line (for example 12 cm from the waist). Grain remains parallel to the original vertical construction axis; the sewn upper sides now taper. Inspect the allowance at the small hip corner. If smoothing that corner, re-walk the side seams rather than assuming their lengths remain exactly 40 cm.
+The waist-to-hip sides are now **cubic Bezier curves**, not straight segments. At the waist, each side tangent is perpendicular to its waist edge: **90° front and back on the stitching lines**. This squares the join so the assembled waist has no angular step at the side seam. At the hip, each curve's tangent follows the lower straight side exactly, so there is no corner in the side outline. The full side is a curved upper section with a tangent-continuous straight lower section, not one uninterrupted cubic.
 
-Editing `#shell_length` adjusts leg length without recalculating the requested rise targets. Always check the resulting outlines: some combinations may give construction circles with no valid intersection, an inverted lower leg, or unsuitable proportions. The selected circle-intersection branch is the nearby lower hem for this baseline; do not assume it remains suitable across arbitrary changes.
+Because the back waist slopes, its initial side tangent points slightly outward before the curve turns inward toward the hip. That is intentional squaring, not an accidental bump from the old polygonal construction. The front starts vertically. Both curves stay regular and descend monotonically, without a cusp or loop. Their native handles remain editable. The full front side length is `Spl_FSideWaist_FHipSide + Line_FHipSide_FOuterHem`; use the analogous `B` names for the back. Select those entries from the Variables table to inspect the evaluated lengths.
+
+The smooth upper sides measure **8.1663 cm front / 8.3478 cm back**. The lower-leg solver leaves each full side at **40 cm** and both inseams at **23.9437 cm**. Both hems remain horizontal and 12.8 cm wide. The front hem depth is 39.8337 cm from the original datum; the back outer hem is at x −0.6539 cm, depth 39.6455 cm. These small lower-leg adjustments preserve all requested stitching-line dimensions.
+
+The hip crossings are construction references, **not matching assembly notches**: their walked positions differ by about 1.8 mm. Mark balance points at the same walked distance down each side (for example 12 cm from the waist). Grain stays parallel to the original vertical construction axis.
+
+### Editing limitation
+
+Side-curve arc lengths and the back tangent angles are numerically calibrated for this revision. **Changing waist take-in, hip depth, back raise, rise targets, hip/hem widths or shell side length directly in Seamly2D does not automatically recalibrate all the smooth-side constraints.** A manual edit can lose the exact 40 cm sides, smooth hip transition or square waist intersection; the checker detects these conditions.
+
+To preserve all constraints after a design change, change the corresponding design inputs in `scripts/draft_pants.py` and regenerate, then recheck and export. For the already-cut baseline, the original centre-rise calibration inputs should stay unchanged. Generation replaces the native file, so save any manually edited version separately first. Do not describe a manually altered version as still satisfying the target dimensions until it has been checked.
 
 The former `#crotch_drop`, `#rise_ease`, and `#leg_ease` controls have been replaced by the explicit seam targets. `#outseam` and `#inseam` are body references, not the garment seam lengths. `#hip_ease` is now calculated from the specified piece hip widths.
 
@@ -85,7 +95,7 @@ Try basted loops on the child. Gather the shell first if firm ribbing cannot str
 
 ## Assembly and fitting
 
-Mark grain, front/back identity, hip reference and rib folds. Sew each front to its corresponding back at the side and inseam. Both sides are 40.00 cm and both inseams are 23.97 cm on the stitching lines. Sew the continuous crotch seam with the legs right sides together. Finish seam allowances to suit the fabric.
+Mark grain, front/back identity, hip reference and rib folds. Sew each front to its corresponding back at the side and inseam. Both sides are 40.00 cm and both inseams are 23.94 cm on the stitching lines. Sew the continuous crotch seam with the legs right sides together. Finish seam allowances to suit the fabric.
 
 Baste bands and check standing, sitting and squatting over the diaper and leggings. Check waist/hip passage, seat coverage, ankle/heel passage and ankle position. Mark matching quarter points, including side-seam positions; front/back waist widths differ. No fly, darts, pockets, elastic casings or reflective bands are included.
 
@@ -95,6 +105,6 @@ View [the annotated PDF](annotated_dimensions.pdf), [PNG](annotated_dimensions.p
 
 The front rise is 8.01561 cm straight plus 9.98439 cm curved; back is 10.00062 cm straight plus 13.49938 cm curved. Curve lengths are integrated along the cubic Bezier with convergence checked. The full front-to-back shell crotch seam is **41.5 cm**, excluding ribbing. These are not vertical body heights.
 
-The checker verifies all requested waist/rise/hip/hem targets from the actual native geometry, equal side and inseams, object references and seam allowances. The updated XML passed the official v0.7.5 schema and native Seamly2D load/export. Physical fit remains to be tested.
+The checker verifies all requested waist/rise/hip/hem targets, integrated curved side lengths, equal inseams, both 90° waist/side angles, tangent continuity at the hips, curve regularity, object references and seam allowances from the actual native geometry. The updated XML passed the official v0.7.5 schema and native Seamly2D load/export. Physical fit remains to be tested.
 
 Review sheets are static snapshots, not cutting layouts. Regenerate after editing using `scripts/annotate_pattern.py`; see the root README. For cutting, create a Seamly2D layout at **100% scale** and verify a known dimension before cutting. The native previews are separate from the annotated review sheets.

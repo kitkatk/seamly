@@ -3,6 +3,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 import math
 from annotate_pattern import curve_length
+from check_pattern import evaluate
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'patterns/children_pants_86'
@@ -90,6 +91,55 @@ VARIABLES = [
  ('cuff_length', '#ankle+#cuff_ease', 'Finished relaxed cuff loop, provisional'),
 ]
 
+def calibrate_smooth_sides(variables):
+    """Square the side/waist joins; solve walked side and matching inseam lengths."""
+    values={}
+    for name,formula,_ in variables:
+        values[name]=evaluate(formula,values)
+    v=values
+    hip=(0.0,v['hip_depth'])
+    def upper_curve(pre, lower_unit):
+        side=(v['front_side_x'],0.0) if pre=='F' else (v['back_side_x'],v['back_side_y'])
+        waist=(v['front_waist_x'],0.0) if pre=='F' else (v['back_waist_x'],-v['back_raise'])
+        wx,wy=waist[0]-side[0],waist[1]-side[1]
+        w=math.hypot(wx,wy)
+        normal=(-wy/w,wx/w)
+        handle=(hip[1]-side[1])/3
+        return (side,(side[0]+normal[0]*handle,side[1]+normal[1]*handle),
+                (hip[0]-lower_unit[0]*handle,hip[1]-lower_unit[1]*handle),hip)
+    front_arc=curve_length(upper_curve('F',(0,1)))
+    front_y=v['hip_depth']+v['shell_length']-front_arc
+    inseam=math.hypot(front_y-v['rise'],v['front_run'])
+    dx=v['back_run'];dy=v['back_circle_dy'];d=math.hypot(dx,dy)
+    def back_geometry(radius):
+        a=(radius*radius-inseam*inseam+d*d)/(2*d)
+        h=math.sqrt(max(0,radius*radius-a*a))
+        x=(a*dx-h*dy)/d;y=v['hip_depth']+(a*dy+h*dx)/d
+        unit=(x/radius,(y-v['hip_depth'])/radius)
+        arc=curve_length(upper_curve('B',unit))
+        return arc,unit
+    lo=abs(d-inseam)+1e-7;hi=min(v['shell_length'],d+inseam)-1e-7
+    assert sum((lo,back_geometry(lo)[0]))<v['shell_length']
+    assert sum((hi,back_geometry(hi)[0]))>v['shell_length']
+    for _ in range(60):
+        mid=(lo+hi)/2
+        if mid+back_geometry(mid)[0]<v['shell_length']:lo=mid
+        else:hi=mid
+    back_arc,unit=back_geometry((lo+hi)/2)
+    back_start=-math.degrees(math.atan2(v['back_waist_x']-v['back_side_x'],v['back_raise']+v['back_side_y']))%360
+    back_end=math.degrees(math.atan2(unit[1],-unit[0]))%360
+    replacements={'front_upper_side':front_arc,'back_upper_side':back_arc}
+    result=[(n,f'{replacements[n]:.15g}' if n in replacements else f,
+             'Calibrated smooth waist-to-hip side curve length; regenerate after geometry edits' if n in replacements else desc)
+            for n,f,desc in variables]
+    result += [('back_side_start_angle',f'{back_start:.15g}','Square side tangent to back waist; regenerate after geometry edits'),
+               ('back_side_end_angle',f'{back_end:.15g}','Smooth tangent into lower back side; regenerate after geometry edits')]
+    return result
+
+
+VARIABLES=calibrate_smooth_sides(VARIABLES)
+
+
 
 
 def sub(parent, tag, **attrs):
@@ -101,7 +151,7 @@ def generate():
     r = ET.Element('pattern')
     for tag, text in [('version', '0.7.5'), ('unit', 'cm'),
                       ('description', 'Size 86 roomy overtrousers; original draft; cut front/back mirrored pairs. Folded rib waistband and cuffs. Fit sample required.'),
-                      ('notes', 'All inputs in Variables. No external measurement file. User revised seam targets: front/back rise 18/23.5, waist 14.5/16.5 (62 cm total), side-only take-in 1.5 cm per piece, hip width 16.5/18, each piece hem 12.8 cm. Main fabric sides fixed at 40 cm; lower back leg balanced to match inseams. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.'),
+                      ('notes', 'All inputs in Variables. No external measurement file. User revised seam targets: front/back rise 18/23.5, waist 14.5/16.5 (62 cm total), side-only take-in 1.5 cm per piece, hip width 16.5/18, each piece hem 12.8 cm. Smooth side curves squared to waist edges. Main fabric sides fixed at 40 cm; lower back leg balanced to match inseams. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.'),
                       ('measurements', '')]:
         sub(r, tag).text = text
     vs = sub(r, 'variables')
@@ -147,9 +197,13 @@ def generate():
             scoop = curve(ch,ct,'270','180', '('+tip+'-#hip_depth)*0.75', ext+'*0.7')
             hip_outer=point('HipSide','0','#hip_depth')
             line(sw,cw); line(cw,ch); line(ct,ih); line(ih,oh)
-            line(oh,hip_outer); line(hip_outer,sw); line(hip_outer,ch,'dashLine')
+            line(oh,hip_outer); line(hip_outer,ch,'dashLine')
+            side_start='270' if prefix=='F' else '#back_side_start_angle'
+            side_end='90' if prefix=='F' else '#back_side_end_angle'
+            side_handle='#hip_depth/3' if prefix=='F' else '(#hip_depth-#back_side_y)/3'
+            side_curve=curve(sw,hip_outer,side_start,side_end,side_handle,side_handle)
             ga=point('GrainTop','#hem/4','#rise'); gb=point('GrainBottom','#hem/4','#shell_length-2');line(ga,gb,'dashLine')
-            outline=[('point',sw),('point',cw),('point',ch),('spline',scoop),('point',ct),('point',ih),('point',oh),('point',hip_outer)]
+            outline=[('point',sw),('point',cw),('point',ch),('spline',scoop),('point',ct),('point',ih),('point',oh),('point',hip_outer),('spline',side_curve,1)]
             quantity=2
         else:
             height='2*#band_height' if prefix=='W' else '2*#cuff_height'
@@ -159,12 +213,14 @@ def generate():
             outline=[('point',anchor),('point',b),('point',c),('point',e)]
             quantity=1 if prefix=='W' else 2
         nodes=[]
-        for kind, ref in outline:
+        for item in outline:
+            kind,ref=item[:2]
+            reverse=item[2] if len(item)>2 else 0
             nodeid=ident()
             attrs=dict(id=nodeid,idObject=ref,type='modelingSpline' if kind=='spline' else 'modeling',inUse='true')
             if kind=='point': attrs.update(mx='.2',my='.2')
             sub(model,kind,**attrs)
-            nodes.append((kind,nodeid))
+            nodes.append((kind,nodeid,reverse))
         p=sub(pieces,'piece',id=ident(),version='2',name=title,mx='0',my='0',closed='1',
               seamAllowance='true',width='#sa',inLayout='true',forbidFlipping='false')
         data=sub(p,'data',visible='true',fontSize='10',mx=str(origin[0]+2),my=str(origin[1]+3),
@@ -177,7 +233,7 @@ def generate():
         else:
             sub(p,'grainline',visible='false')
         ns=sub(p,'nodes')
-        for kind,nodeid in nodes:sub(ns,'node',idObject=nodeid,type='NodePoint' if kind=='point' else 'NodeSpline',**({'reverse':'0'} if kind=='spline' else {}))
+        for kind,nodeid,reverse in nodes:sub(ns,'node',idObject=nodeid,type='NodePoint' if kind=='point' else 'NodeSpline',**({'reverse':str(reverse)} if kind=='spline' else {}))
     ET.indent(r)
     ET.ElementTree(r).write(OUT/'children_pants_86.sm2d',encoding='UTF-8',xml_declaration=True)
     return r
