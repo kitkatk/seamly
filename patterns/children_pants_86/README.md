@@ -1,110 +1,89 @@
-# Size 86: roomy children's outer trousers
+# Size 86 — barrel-inspired softshell overtrousers
 
-An original, editable base block inspired by the reference's loose pull-on silhouette, for wearing over a diaper and leggings. The waistband and cuffs are folded ribbing, **3 cm finished height**, with cuffs intended at the ankle. Baste a fitting sample in similar fabric and check sitting and squatting before cutting the final fabric.
+This is an **original whole-leg redraft** for a child wearing a diaper and leggings. The prior pattern concentrated shaping at the upper hip and left most of the leg straight. This version carries a broad bow through the thigh/upper-knee region and tapers gradually to the ankle, with curved inseams as well as curved outseams.
 
-## Current requested stitching-line dimensions
+It is a fitting draft, not a professionally fitted commercial block. Baste a sample in material with similar weight and stiffness. The previously cut straight-leg pieces are **not guaranteed to contain this new outline**; overlay the patterns before considering reuse. Some regions need additional fabric.
 
-All dimensions are centimetres. Rise seam lengths follow the centre seam from shell waist to crotch/inseam junction and **exclude the waistband and seam allowance**.
+## What changed
 
-| Dimension | Front piece | Back piece |
+- The full outseam is two native cubic Beziers joined with a common vertical tangent at the broad barrel station. There is no straight lower outseam or isolated waist-to-hip scoop.
+- The side moves gradually outward from the waist to 2 cm beyond the side-waist axis around 22.10 cm down the shell, then returns inward to the ankle. The bow depth is a design choice, not a body measurement.
+- Front and back use **identical side curves**, so their whole side lengths, upper/lower sections and barrel balance stations match.
+- Both inseams are curved, retaining thigh volume and tapering toward the cuff. The inseams and side seams enter the horizontal hem at 90°.
+- The back waist is now a shallow curve, rather than a sloping straight segment. Its side tangent is horizontal, meeting the vertical side tangent at 90° without the previous small outward waist bump.
+- The centre seams now curve smoothly through the hip reference instead of joining a sloping straight segment to a vertical crotch tangent. Their waist tangents are vertical, squaring both centre-waist joins as well.
+- The centre-back raise is solved to about 2.36 cm to match the curved inseams while retaining the 23.5 cm back rise seam. Other centre-waist and crotch coordinates have changed to accommodate the new shape.
+
+## Current stitching-line dimensions
+
+All dimensions are centimetres. Shell values exclude the 1 cm seam allowance and the separate ribbing.
+
+| Dimension | Front | Back |
 |---|---:|---:|
-| Seam-walked rise | **18.00** | **23.50** |
-| Waist edge, including its slope | **14.50** | **16.50** |
-| Horizontal hip width | **16.50** | **18.00** |
-| Hem width | **12.80** | **12.80** |
-| Main-fabric side seam | **40.00** | **40.00** |
-| Inseam, derived to match | **23.94** | **23.94** |
-| Straight upper centre | 8.02 | 10.00 |
-| Crotch curve alone | 9.98 | 13.50 |
+| Waist edge | 14.50, straight | 16.50, curved |
+| Hip width at reference level | 16.50 | 18.00 |
+| Centre rise, seam-walked | 18.00 | 23.50 |
+| Full curved side seam | 40.00 | 40.00 |
+| Curved inseam | 23.38 | 23.38 |
+| Hem width | 12.80 | 12.80 |
+| Waist/side intersection | 90° | 90° |
+| Side/hem and inseam/hem intersections | 90° | 90° |
 
-Front and back are each cut as a mirrored pair. These piece dimensions give:
+- Full shell waist: **62 cm**.
+- Full shell hip: **69 cm**, including 14 cm ease over the supplied 55 cm dressed hip reference.
+- Shell opening per leg: **25.6 cm**.
+- Developed side length including 3 cm waistband and 3 cm cuff: **46 cm**.
+- Shell vertical height: **39.47 cm**; curved seam length and vertical height are different quantities.
+- Generous barrel-station circumference per leg: **42.09 cm**, at approximately **22.10 cm** shell depth. The leg narrows progressively below this station. This is not a measured or standardized child knee circumference.
+- Centre-back waist raise: **2.36 cm**, a solved pattern adjustment, not a new body measurement.
 
-- Full shell waist: **62 cm**, gathered into ribbing.
-- Full shell hip: **69 cm**; 14 cm ease over the supplied 55 cm body hip.
-- Shell opening per leg: **25.6 cm**, gathered into a cuff.
-- Developed side length including both rib bands: **46.00 cm**.
-- Front vertical crotch-tip depth from shell side waist: 16.78 cm (19.78 cm including waistband).
-- Back crotch-tip depth from the original side-waist datum: 18.56 cm. After shaping, the back side waist is 0.167 cm above that datum, so the depth below the new side waist is 18.73 cm and the centre-back raise above it is 1.83 cm.
-
-The dressed body references remain waist 50, hip 55, side waist-to-floor 41, and vertical crotch-to-floor 25. The last two measurements were taken over diaper and leggings. They remain body references; they do not override the new seam-length targets. There is no second diaper-thickness allowance.
-
-The developed garment length is intentionally longer than the floor-based body reference. Cuffs sit at the ankle and shell fabric blouses above them. Actual blousing also depends on the unmeasured ankle-to-floor distance. Baste at the intended ankle position and check movement and excess length before trimming.
+Original dressed body references remain waist 50, hip 55, waist-to-floor 41 and vertical crotch-to-floor 25. These do not override the garment design targets. No extra diaper thickness is assumed beyond the dressed measurements and specified ease. The cuffs should sit at the ankle; baste their position and check sitting, squatting, heel passage and excess blousing.
 
 ## Open and adjust in Seamly2D
 
-Open `children_pants_86.sm2d` directly using File → Open. No linked `.smis` file is required. The file uses native format 0.7.5 and was tested in Seamly2D v2026.10.12.200.
+Open `children_pants_86.sm2d` using File → Open. It is a self-contained native format 0.7.5 file with all four pieces and seam allowances. No `.smis` file is needed. Native load and SVG/PNG exports were tested with Seamly2D v2026.10.12.200.
 
-In the Variables table, edit these primary design inputs:
+The point construction, native Bezier handles and solved coordinates are editable in Seamly2D. The first Variables rows describe the design targets; later rows contain solved results and point coordinates.
 
-- `#front_rise_target`, `#back_rise_target`: actual seam-walked shell rise targets.
-- `#waist_take_in`: side-only reduction on EACH piece, now 1.5 cm. Increasing it by 0.25 cm removes another 1 cm from the full shell opening.
-- `#front_waist_before_take_in`, `#back_waist_before_take_in`: original piece waist lengths, 16 and 18 cm. `#front_waist` / `#back_waist` are the resulting 14.5 / 16.5 cm edges. Leave the original values unchanged when adjusting only the side take-in.
-- `#front_width`, `#back_width`: piece hip widths.
-- `#hem_width`: width at the hem of **each** piece; `#hem` is the derived full leg opening.
-- `#shell_length`: main-fabric side seam excluding both bands.
-- `#hip_depth`, `#back_raise`: hip reference level and centre-back waist raise.
-- `#band_height`, `#cuff_height`, `#waist_ratio`, `#ankle`, `#cuff_ease`, `#sa`: ribbing and seam allowances.
+**Editing a target variable does not rerun the numerical fitting solver.** To rebalance the exact lengths and angles after a design change, edit `DESIGN` in `scripts/draft_pants.py`, regenerate, and run the checker and annotator. Generation replaces the supplied native file; save a separately edited copy first.
 
-The new construction uses a calibrated cubic shape scaled by its required arc length. The arc and straight upper-centre lengths therefore sum to the requested rise **inside Seamly2D**, including after editing the rise targets. The default crotch extensions remain 2.75 cm front and 5.5 cm back. Do not edit the `#front_shape_*` / `#back_shape_*` calibration ratios unless changing the construction method.
+Useful generator inputs include `barrel_bow`, `barrel_level`, `hem_shift`, shell side length, front/back waist and hip widths, rise targets and hem width. The solver fits full side arc length, waist-curve length, rise lengths and matching curved inseams. Extreme combinations may be impossible or may give unsuitable shapes; do not treat this as validated grading across sizes.
 
-The waist reduction remains entirely at the sides: each of the four waist edges is shortened by 1.5 cm, giving `2 × (14.5 + 16.5) = 62 cm`. The original centre-waist, hip and crotch points, crotch handles and rise lengths are preserved. The back waist slopes, so taking 1.5 cm along it also lifts its side endpoint by 0.167 cm.
+For inspection in Seamly2D, hover over a line or curve for its length, or use Measurements → Variables table → Line lengths / Curve lengths. For a complete side, sum `Spl_FSideWaist_FBarrel + Spl_FBarrel_FOuterHem` (replace `F` with `B` for the back). Inseams are now `Spl_FCrotch_FInnerHem` and `Spl_BCrotch_BInnerHem`. The back waist is `Spl_BSideWaist_BWaist`.
 
-## Smooth side shaping and square waist corners
+## Cut list and assembly
 
-The waist-to-hip sides are now **cubic Bezier curves**, not straight segments. At the waist, each side tangent is perpendicular to its waist edge: **90° front and back on the stitching lines**. This squares the join so the assembled waist has no angular step at the side seam. At the hip, each curve's tangent follows the lower straight side exactly, so there is no corner in the side outline. The full side is a curved upper section with a tangent-continuous straight lower section, not one uninterrupted cubic.
-
-Because the back waist slopes, its initial side tangent points slightly outward before the curve turns inward toward the hip. That is intentional squaring, not an accidental bump from the old polygonal construction. The front starts vertically. Both curves stay regular and descend monotonically, without a cusp or loop. Their native handles remain editable. The full front side length is `Spl_FSideWaist_FHipSide + Line_FHipSide_FOuterHem`; use the analogous `B` names for the back. Select those entries from the Variables table to inspect the evaluated lengths.
-
-The smooth upper sides measure **8.1663 cm front / 8.3478 cm back**. The lower-leg solver leaves each full side at **40 cm** and both inseams at **23.9437 cm**. Both hems remain horizontal and 12.8 cm wide. The front hem depth is 39.8337 cm from the original datum; the back outer hem is at x −0.6539 cm, depth 39.6455 cm. These small lower-leg adjustments preserve all requested stitching-line dimensions.
-
-The hip crossings are construction references, **not matching assembly notches**: their walked positions differ by about 1.8 mm. Mark balance points at the same walked distance down each side (for example 12 cm from the waist). Grain stays parallel to the original vertical construction axis.
-
-### Editing limitation
-
-Side-curve arc lengths and the back tangent angles are numerically calibrated for this revision. **Changing waist take-in, hip depth, back raise, rise targets, hip/hem widths or shell side length directly in Seamly2D does not automatically recalibrate all the smooth-side constraints.** A manual edit can lose the exact 40 cm sides, smooth hip transition or square waist intersection; the checker detects these conditions.
-
-To preserve all constraints after a design change, change the corresponding design inputs in `scripts/draft_pants.py` and regenerate, then recheck and export. For the already-cut baseline, the original centre-rise calibration inputs should stay unchanged. Generation replaces the native file, so save any manually edited version separately first. Do not describe a manually altered version as still satisfying the target dimensions until it has been checked.
-
-The former `#crotch_drop`, `#rise_ease`, and `#leg_ease` controls have been replaced by the explicit seam targets. `#outseam` and `#inseam` are body references, not the garment seam lengths. `#hip_ease` is now calculated from the specified piece hip widths.
-
-You can still adjust crotch spline handles directly, but doing so changes the seam-walked rise; remeasure and recheck after a handle edit. The centre seams slope slightly from the waist to the wider hip. The crotch curves retain the original vertical tangent at their hip endpoint; smooth that small tangent change during fitting if needed, then walk the seam again.
-
-Save your adjusted version under a separate filename. The generator replaces the supplied `.sm2d`; do not regenerate over unsaved direct edits.
-
-## Cut list and ribbing
-
-Seamly2D generates **1 cm seam allowance on every edge** by default. Do not add another allowance.
-
-| Piece | Cut | Fabric / raw dimensions |
+| Piece | Quantity | Material |
 |---|---|---|
-| Front | 2 mirrored | Main fabric, grain parallel to original vertical construction axis |
-| Back | 2 mirrored | Main fabric, grain parallel to original vertical construction axis |
-| Waistband | 1 rectangle | Ribbing **49 × 8 cm**, allowances included |
-| Cuff | 2 rectangles | Ribbing **20 × 8 cm** each, allowances included |
+| Front barrel | 2 mirrored | Winter softshell; vertical grain |
+| Back barrel | 2 mirrored | Winter softshell; vertical grain |
+| Waist rib | 1 rectangle, **49 × 8 cm raw** | Ribbing, stretch along the 49 cm direction |
+| Cuff rib | 2 rectangles, **20 × 8 cm raw** each | Ribbing, stretch along the 20 cm direction |
 
-Rib lengths have not been changed by the shell adjustments: the relaxed waist loop is 47 cm and each cuff loop is 18 cm. The estimated body ankle is 16 cm, with 2 cm positive cuff ease. All rib lengths remain provisional.
+The native pieces include **1 cm seam allowance on every edge**. Do not add another allowance. Rib raw dimensions include those allowances. Join each rectangle's short ends, fold lengthwise in half, and attach with 1 cm allowance for a 3 cm finished band. The relaxed finished waist loop remains **47 cm**, each cuff loop **18 cm**. These sizes remain provisional; the ribbing was not shortened with the shell.
 
-Greatest stretch runs along the 49 cm / 20 cm direction. Rib wales run across the 8 cm height. Join short ends into a loop, fold lengthwise at 4 cm from the raw edge, and attach with 1 cm allowance: the visible finished height is 3 cm. These are full rectangles, not pieces cut on the fold. Fold lines are construction lines in Draft mode.
+At the waist, attaching the 47 cm loop evenly to the 62 cm shell requires approximately **31.9% extension**. At each cuff, attaching an 18 cm loop to the 25.6 cm shell requires about **42.2% extension**. Verify comfortable hip/heel passage and recovery on the child. Gather the shell first if needed for attachment; do not stretch the softshell itself.
 
-The waist reduction reduces gathering and attachment stretch; ribbing sizes are unchanged:
+Mark the barrel station on both side seams; these stations match because the side curves are identical. Mark any additional assembly balance points by matching **walked seam distance**, especially on the differently shaped inseams. Sew front to back at side and inseam, then sew the continuous crotch seam. Baste bands before final finishing and test movement over the diaper and leggings. There are no knee darts, extra panels, pockets, fly or reflective bands in this version.
 
-- Waist: about **31.9%** extension to attach the 47 cm loop to the 62 cm shell waist; at least **17%** just to pass the measured 55 cm body hip, plus comfortable clearance.
-- Cuffs: about **42.2%** extension to attach each 18 cm loop to a 25.6 cm shell opening. Check actual heel/foot passage; ankle circumference alone cannot establish this.
+## Review sheets and validation
 
-Try basted loops on the child. Gather the shell first if firm ribbing cannot stretch enough for even attachment. If a rib loop cannot pass the body part comfortably, increase the loop length; gathering the shell does not solve an undersized opening. Use stretch-compatible stitching and avoid stretching the shell.
+- [Dimensioned PDF](annotated_dimensions.pdf)
+- [Dimensioned PNG](annotated_dimensions.png)
+- [Dimensioned SVG](annotated_dimensions.svg)
+- [Seam lengths](seam_lengths.json) and [sizing checks](dimensions.json)
 
-## Assembly and fitting
+Dimension arrows connect endpoints; curved-edge labels report the walked curve lengths, not those chords. The annotation reads the actual native XML and integrates the curves; it does not estimate curves from straight endpoint distances. The checker verifies targets, matching sides and inseams, the shared side shape, square waist/hem corners, tangent continuity, hip reference placement, knee-to-hem taper, non-crossing leg edges and valid model references. The file passed the official v0.7.5 XML schema and native load/export.
 
-Mark grain, front/back identity, hip reference and rib folds. Sew each front to its corresponding back at the side and inseam. Both sides are 40.00 cm and both inseams are 23.94 cm on the stitching lines. Sew the continuous crotch seam with the legs right sides together. Finish seam allowances to suit the fabric.
+Review sheets are static sizing snapshots, **not cutting layouts**. Regenerate them after native edits. Produce a Seamly2D cutting layout at 100% scale and check a known dimension before cutting.
 
-Baste bands and check standing, sitting and squatting over the diaper and leggings. Check waist/hip passage, seat coverage, ankle/heel passage and ankle position. Mark matching quarter points, including side-seam positions; front/back waist widths differ. No fly, darts, pockets, elastic casings or reflective bands are included.
+## Research access and provenance
 
-## Dimensioned review and validation
+The requested fresh sewing-site research could **not** be completed in this cloud session: direct requests to the Sew Liberated Arthur Pants page and Style Arc Bob Woven Pant page returned proxy `403 Forbidden`. No descriptions or commercial pattern drawings from those pages were used as verified evidence, traced or copied. The current shape is an original barrel-inspired redraft based on the stated silhouette and independent drafting judgment.
 
-View [the annotated PDF](annotated_dimensions.pdf), [PNG](annotated_dimensions.png), or [SVG](annotated_dimensions.svg). Shell dimensions are stitching-line lengths excluding allowances. Rib CUT dimensions include allowances. [seam_lengths.json](seam_lengths.json) and [dimensions.json](dimensions.json) contain evaluated values.
+The blocked candidate references were:
 
-The front rise is 8.01561 cm straight plus 9.98439 cm curved; back is 10.00062 cm straight plus 13.49938 cm curved. Curve lengths are integrated along the cubic Bezier with convergence checked. The full front-to-back shell crotch seam is **41.5 cm**, excluding ribbing. These are not vertical body heights.
+- https://sewliberated.com/products/arthur-pants-digital-sewing-pattern
+- https://www.stylearc.com/shop/sewing-patterns/bob-woven-pant/
 
-The checker verifies all requested waist/rise/hip/hem targets, integrated curved side lengths, equal inseams, both 90° waist/side angles, tangent continuity at the hips, curve regularity, object references and seam allowances from the actual native geometry. The updated XML passed the official v0.7.5 schema and native Seamly2D load/export. Physical fit remains to be tested.
-
-Review sheets are static snapshots, not cutting layouts. Regenerate after editing using `scripts/annotate_pattern.py`; see the root README. For cutting, create a Seamly2D layout at **100% scale** and verify a known dimension before cutting. The native previews are separate from the annotated review sheets.
+Domain additions for these sites and `blog.megannielsen.com` were saved as an environment configuration draft. They require review/save in environment settings and publication to become reusable; saving the draft alone does not establish access. A reference check remains outstanding until access is available. The draft's geometric validation should not be confused with external construction research or physical fit validation.

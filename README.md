@@ -1,47 +1,46 @@
 # seamly
-Base shapes and patterns for sewing pattern design.
 
-## Children's outer trousers — size 86
+Original editable sewing-pattern drafts.
 
-Open [the editable Seamly2D pattern](patterns/children_pants_86/children_pants_86.sm2d) with **File → Open** in Seamly2D. This is a native formula-driven `.sm2d` file, not an SVG tracing. No separate measurements file is required. See the [pattern instructions](patterns/children_pants_86/README.md) before cutting.
+## Size-86 barrel-inspired children's overtrousers
 
-- [Dimensioned review sheet (PDF)](patterns/children_pants_86/annotated_dimensions.pdf)
-- [Dimensioned review sheet (PNG)](patterns/children_pants_86/annotated_dimensions.png)
-- [SVG preview](patterns/children_pants_86/preview.svg)
-- [Calculated dimensions](patterns/children_pants_86/dimensions.json)
+Open [children_pants_86.sm2d](patterns/children_pants_86/children_pants_86.sm2d) directly in Seamly2D. This revision redrafts the whole leg with broadly bowed side seams and curved inseams, rather than the previous waist-only scoop. It keeps a 62 cm shell waist, 69 cm hip, 40 cm curved sides, 18/23.5 cm front/back rise seams and separate 3 cm rib bands.
 
-### Development
+- [Dimensioned review PDF](patterns/children_pants_86/annotated_dimensions.pdf)
+- [Dimensioned review PNG](patterns/children_pants_86/annotated_dimensions.png)
+- [Native SVG preview](patterns/children_pants_86/preview.svg)
+- [Construction, fitting and research-access notes](patterns/children_pants_86/README.md)
 
-Python 3.12 was used; Python 3.10+ is sufficient.
+This is an original fitting draft. Fresh commercial sewing-site research remains blocked by the cloud network policy; see the pattern notes for the attempted references. The earlier cut pieces may not accommodate the new outline.
+
+## Development
+
+Python 3.10+; tested with 3.12. Python dependencies are in `requirements.txt`. CairoSVG also requires system Cairo (`libcairo2` on Debian/Ubuntu or `brew install cairo` on macOS).
 
 ```sh
 cd /workspace/seamly
 python -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python scripts/check_pattern.py
+.venv/bin/python scripts/annotate_pattern.py
 ```
 
-Python dependencies are pinned in `requirements.txt`: `lxml` for XML checking and `CairoSVG` for dimensioned SVG/PNG/PDF output. CairoSVG also requires the system Cairo library (for example, `libcairo2` on Debian/Ubuntu or `brew install cairo` on macOS). The generator also uses the shared geometry helpers to calibrate the seam-length targets. **Regeneration replaces the supplied pattern and discards any direct Seamly2D edits to that file**; save your adjusted version under a different filename first.
+To change the constrained design, edit `DESIGN` in `scripts/draft_pants.py`, then run:
 
 ```sh
 .venv/bin/python scripts/draft_pants.py
 .venv/bin/python scripts/check_pattern.py
+.venv/bin/python scripts/annotate_pattern.py
 ```
 
-Edit `VARIABLES` in the generator for a regenerated baseline, or use Seamly2D's Variables table for interactive changes. The checker evaluates the generated file itself and checks the requested seam-walked rises, waist/hip/hem targets, matching sides and inseams, object references, and seam allowances. It writes `dimensions.json`. Optionally validate the native XML against the upstream `src/libs/ifc/schema/pattern/v0.7.5.xsd` with `--schema PATH`.
+**The generator replaces the native file.** Save a separately edited native pattern first. Changing a target variable in Seamly2D does not rerun the numerical solver; native points and handles remain editable, but recheck every affected seam and angle.
 
-Native load and SVG/PNG exports were also verified using the official Seamly2D Linux release **v2026.10.12.200**, with Xvfb for headless operation. Seamly2D is a desktop application, not a pip dependency; obtain desktop releases from https://github.com/FashionFreedom/Seamly2D/releases. No web server is needed.
-
-### Dimensioned sketch
+For a local edited copy, the annotator supports:
 
 ```sh
-.venv/bin/python scripts/annotate_pattern.py
-# To inspect a locally adjusted copy without replacing its native file:
 .venv/bin/python scripts/annotate_pattern.py --pattern /path/to/children_pants_86.sm2d --output /path/to/review
 ```
 
-The script reads the actual native XML and renders contour seam lengths, curve lengths, hip widths, rib cutting dimensions and sizing totals to `annotated_dimensions.svg`, `.png`, `.pdf`, and `seam_lengths.json`. It supports this draft's existing centimetre-based endLine point and simpleInteractive Bezier construction; it stops on unsupported geometry. It does not modify the native pattern. The sheets are snapshots: regenerate after changing measurements or curve handles. They are sizing references, not cutting layouts.
+The annotation supports this draft's centimetre-based `endLine` points and `simpleInteractive` Beziers. It writes SVG, PNG, PDF and seam-length JSON. These are review snapshots, not cutting layouts. Schema validation is available with `scripts/check_pattern.py --schema PATH_TO_OFFICIAL_v0.7.5.xsd`.
 
-In Seamly2D Draft mode, hover over a drawn line or curve for its length, or open **Measurements → Variables table → Line lengths / Curve lengths**. There is no verified automatic persistent dimension-overlay option.
-
-The current side seams use smooth upper Beziers with square waist intersections and straight tangent lower sections. The generator calibrates side arc lengths and back tangent angles numerically. After changes to design measurements, regenerate from the generator inputs to restore these coupled constraints; arbitrary native edits do not automatically preserve every length and angle. See the pattern README for the current editing limitations.
+Native validation used official Seamly2D v2026.10.12.200 and Xvfb for headless exports. No web server is needed. Desktop releases: https://github.com/FashionFreedom/Seamly2D/releases.

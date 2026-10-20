@@ -1,76 +1,80 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1020" viewBox="0 0 1400 1020">
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 10 0 L 0 5 L 10 10" fill="none" stroke="#2563a6"/></marker></defs>
 <rect width="1400" height="1020" fill="white"/><g font-family="DejaVu Sans, sans-serif">
-<text x="45.00" y="38.00" font-size="26" fill="#24344a" text-anchor="start">SIZE 86  |  Dimensioned pattern review</text>
+<text x="45.00" y="38.00" font-size="26" fill="#24344a" text-anchor="start">SIZE 86  |  Barrel-leg pattern review</text>
 <text x="45.00" y="66.00" font-size="16" fill="#24344a" text-anchor="start">All dimensions in cm on STITCHING lines. 1 cm seam allowance is excluded from the shell drawing.</text>
-<text x="45.00" y="89.00" font-size="14" fill="#24344a" text-anchor="start">Snapshot of the supplied .sm2d file; regenerate after edits. Review sheet — do not use as a cutting layout.</text>
-<path d="M 125.75,160.0 L 278.0,160.0 L 283.25,244.0 C 283.25,313.10399238469944 291.91249999999997,336.1386565129326 312.125,336.1386565129326 L 244.39999999999992,578.2539723818782 L 109.99999999999993,578.2539723818782 L 109.99999999999999,244.0 C 109.99999999999999,216.0 125.74999999999999,188.0 125.75,160.0 Z" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>
-<circle cx="125.75" cy="160.0" r="2.5" fill="#24344a"/>
-<circle cx="278.0" cy="160.0" r="2.5" fill="#24344a"/>
-<text x="283.00" y="155.00" font-size="11" fill="#24344a" text-anchor="start">FWaist</text>
-<circle cx="283.25" cy="244.0" r="2.5" fill="#24344a"/>
-<text x="288.25" y="239.00" font-size="11" fill="#24344a" text-anchor="start">FHip</text>
-<circle cx="312.125" cy="336.1386565129326" r="2.5" fill="#24344a"/>
-<text x="317.12" y="331.14" font-size="11" fill="#24344a" text-anchor="start">FCrotch</text>
-<circle cx="244.39999999999992" cy="578.2539723818782" r="2.5" fill="#24344a"/>
-<circle cx="109.99999999999993" cy="578.2539723818782" r="2.5" fill="#24344a"/>
-<text x="133.75" y="180.00" font-size="12" fill="#2563a6" text-anchor="start">90°</text>
-<text x="122.00" y="198.00" font-size="20" fill="#24344a" text-anchor="start">FRONT</text>
-<path d="M 125.750,160.000 L 125.750,133.000" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 278.000,160.000 L 278.000,133.000" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 125.75,133.0 L 278.0,133.0" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(201.88,133.00) rotate(0.00)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Waist 14.50</text>
-<path d="M 125.750,160.000 L 90.775,158.683" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 110.000,578.254 L 75.025,576.937" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 90.77478891046607,158.6829543506231 L 75.02478891046599,576.9369267325012" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(82.90,367.81) rotate(272.16)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Side 40.00</text>
-<path d="M 312.125,336.139 L 339.090,343.681" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 244.400,578.254 L 271.365,585.797" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 339.0899374456671,343.681344929622 L 271.364937445667,585.7966607985676" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(305.23,464.74) rotate(285.63)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Inseam 23.94</text>
-<path d="M 110.000,578.254 L 110.000,613.254" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 244.400,578.254 L 244.400,613.254" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 109.99999999999993,613.2539723818782 L 244.39999999999992,613.2539723818782" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(177.20,613.25) rotate(0.00)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Hem 12.80</text>
-<path d="M 110.000,244.000 L 283.250,244.000" fill="none" stroke="#839b86" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="45.00" y="89.00" font-size="14" fill="#24344a" text-anchor="start">Original barrel-inspired redraft. Full curved side and inseam; not a cutting layout. Fit sample required.</text>
+<path d="M 110.0,160.0 L 262.25,160.0 C 262.25,188.00000000000034 278.685212344397,215.99999999999966 278.685212344397,244.0 C 278.685212344397,311.72317966185625 287.347712344397,334.297572882475 307.560212344397,334.297572882475 C 286.2256167894187,414.33732092897066 260.1499999999999,494.3770689754663 260.1499999999999,574.416817021963 L 125.74999999999993,574.416817021963 C 125.74999999999993,497.83258923630365 88.99999999999994,441.80343557493086 88.99999999999996,392.0734175322955 C 88.99999999999996,342.34339948966016 109.99999999999999,257.47083536356604 110.0,160.0 Z" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>
+<circle cx="110.0" cy="160.0" r="2.5" fill="#24344a"/>
+<circle cx="262.25" cy="160.0" r="2.5" fill="#24344a"/>
+<text x="267.25" y="155.00" font-size="11" fill="#24344a" text-anchor="start">FWaist</text>
+<circle cx="278.685212344397" cy="244.0" r="2.5" fill="#24344a"/>
+<text x="283.69" y="239.00" font-size="11" fill="#24344a" text-anchor="start">FHip</text>
+<circle cx="307.560212344397" cy="334.297572882475" r="2.5" fill="#24344a"/>
+<text x="312.56" y="329.30" font-size="11" fill="#24344a" text-anchor="start">FCrotch</text>
+<circle cx="260.1499999999999" cy="574.416817021963" r="2.5" fill="#24344a"/>
+<circle cx="125.74999999999993" cy="574.416817021963" r="2.5" fill="#24344a"/>
+<text x="118.00" y="180.00" font-size="12" fill="#2563a6" text-anchor="start">90°</text>
+<text x="122.00" y="198.00" font-size="17" fill="#24344a" text-anchor="start">FRONT BARREL</text>
+<path d="M 110.000,160.000 L 110.000,133.000" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 262.250,160.000 L 262.250,133.000" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 110.0,133.0 L 262.25,133.0" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(186.12,133.00) rotate(0.00)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Waist 14.50</text>
+<path d="M 110.000,160.000 L 50.043,162.279" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 125.750,574.417 L 65.793,576.695" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 50.043285004860884,162.27866781073072 L 65.79328500486082,576.6954848326938" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(57.92,369.49) rotate(87.82)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Side arc 40.00</text>
+<path d="M 307.560,334.298 L 335.030,339.721" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 260.150,574.417 L 287.620,579.841" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 335.02988831005314,339.7213079738906 L 287.6196759656561,579.8405521133786" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(311.32,459.78) rotate(281.17)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Inseam arc 23.38</text>
+<path d="M 125.750,574.417 L 125.750,609.417" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 260.150,574.417 L 260.150,609.417" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 125.74999999999993,609.416817021963 L 260.1499999999999,609.416817021963" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(192.95,609.42) rotate(0.00)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Hem 12.80</text>
+<path d="M 105.435,244.000 L 278.685,244.000" fill="none" stroke="#839b86" stroke-width="1.5" stroke-dasharray="5 4"/>
+<path d="M 89.000,392.073 L 291.766,392.073" fill="none" stroke="#839b86" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="100.00" y="406.07" font-size="11" fill="#24344a" text-anchor="start">Barrel station</text>
 <text x="118.00" y="236.00" font-size="12" fill="#24344a" text-anchor="start">Hip width 16.50</text>
-<text x="122.00" y="305.00" font-size="13" fill="#24344a" text-anchor="start">Upper centre: 8.02</text>
-<text x="122.00" y="329.00" font-size="13" fill="#24344a" text-anchor="start">Crotch curve: 9.98</text>
+<text x="122.00" y="305.00" font-size="13" fill="#24344a" text-anchor="start">Upper centre curve: 8.18</text>
+<text x="122.00" y="329.00" font-size="13" fill="#24344a" text-anchor="start">Crotch curve: 9.82</text>
 <text x="122.00" y="353.00" font-size="13" fill="#24344a" text-anchor="start">Full rise seam: 18.00</text>
 <text x="122.00" y="377.00" font-size="11" fill="#24344a" text-anchor="start">(waist edge to crotch tip)</text>
 <text x="122.00" y="420.00" font-size="11" fill="#24344a" text-anchor="start">Grain: vertical</text>
-<path d="M 515.6524758424986,158.25 L 687.8297101099823,139.0 L 689.0,244.0 C 689.0,327.1987260957495 706.325,354.9316347943327 746.75,354.9316347943327 L 627.5337674692528,576.2774992338883 L 493.13376746925275,576.2774992338883 L 500.0,244.0 C 500.59052426019144,215.4227673568176 518.8284017684246,186.6563450474973 515.6524758424986,158.25 Z" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>
-<circle cx="515.6524758424986" cy="158.25" r="2.5" fill="#24344a"/>
-<circle cx="687.8297101099823" cy="139.0" r="2.5" fill="#24344a"/>
-<text x="692.83" y="134.00" font-size="11" fill="#24344a" text-anchor="start">BWaist</text>
-<circle cx="689.0" cy="244.0" r="2.5" fill="#24344a"/>
-<text x="694.00" y="239.00" font-size="11" fill="#24344a" text-anchor="start">BHip</text>
-<circle cx="746.75" cy="354.9316347943327" r="2.5" fill="#24344a"/>
-<text x="751.75" y="349.93" font-size="11" fill="#24344a" text-anchor="start">BCrotch</text>
-<circle cx="627.5337674692528" cy="576.2774992338883" r="2.5" fill="#24344a"/>
-<circle cx="493.13376746925275" cy="576.2774992338883" r="2.5" fill="#24344a"/>
-<text x="523.65" y="178.25" font-size="12" fill="#2563a6" text-anchor="start">90°</text>
-<text x="512.00" y="198.00" font-size="20" fill="#24344a" text-anchor="start">BACK</text>
-<path d="M 515.652,158.250 L 512.652,131.417" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 687.830,139.000 L 684.830,112.167" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 512.6524758424986,131.4171842700025 L 684.8297101099823,112.16718427000252" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(598.74,121.79) rotate(-6.38)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Waist 16.50</text>
-<path d="M 515.652,158.250 L 480.703,156.367" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 493.134,576.277 L 458.184,574.395" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 480.70314822854016,156.36731592342105 L 458.18443985529433,574.3948151573094" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(469.44,365.38) rotate(273.08)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Side 40.00</text>
-<path d="M 746.750,354.932 L 771.402,368.209" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 627.534,576.277 L 652.186,589.555" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 771.4017960544902,368.20901975101077 L 652.185563523743,589.5548841905663" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(711.79,478.88) rotate(298.31)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Inseam 23.94</text>
-<path d="M 493.134,576.277 L 493.134,611.277" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 627.534,576.277 L 627.534,611.277" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
-<path d="M 493.13376746925275,611.2774992338883 L 627.5337674692528,611.2774992338883" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
-<text transform="translate(560.33,611.28) rotate(0.00)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Hem 12.80</text>
-<path d="M 500.000,244.000 L 689.000,244.000" fill="none" stroke="#839b86" stroke-width="1.5" stroke-dasharray="5 4"/>
+<path d="M 500.0,160.0 C 557.0405727795177,160.0 614.0811455590394,135.25379198951904 671.121718338557,135.25379198951904 C 671.121718338557,171.5025279930127 684.435212344397,207.75126399650634 684.435212344397,244.0 C 684.435212344397,323.27686480347865 701.7602123443969,349.702486404634 742.185212344397,349.702486404634 C 700.7693667894165,424.6072632770748 650.1499999999999,499.51204014952106 650.1499999999999,574.416817021963 L 515.7499999999999,574.416817021963 C 515.7499999999999,497.83258923630365 478.99999999999994,441.80343557493086 478.99999999999994,392.0734175322955 C 478.99999999999994,342.34339948966016 500.0,257.47083536356604 500.0,160.0 Z" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>
+<circle cx="500.0" cy="160.0" r="2.5" fill="#24344a"/>
+<circle cx="671.121718338557" cy="135.25379198951904" r="2.5" fill="#24344a"/>
+<text x="676.12" y="130.25" font-size="11" fill="#24344a" text-anchor="start">BWaist</text>
+<circle cx="684.435212344397" cy="244.0" r="2.5" fill="#24344a"/>
+<text x="689.44" y="239.00" font-size="11" fill="#24344a" text-anchor="start">BHip</text>
+<circle cx="742.185212344397" cy="349.702486404634" r="2.5" fill="#24344a"/>
+<text x="747.19" y="344.70" font-size="11" fill="#24344a" text-anchor="start">BCrotch</text>
+<circle cx="650.1499999999999" cy="574.416817021963" r="2.5" fill="#24344a"/>
+<circle cx="515.7499999999999" cy="574.416817021963" r="2.5" fill="#24344a"/>
+<text x="508.00" y="180.00" font-size="12" fill="#2563a6" text-anchor="start">90°</text>
+<text x="512.00" y="198.00" font-size="17" fill="#24344a" text-anchor="start">BACK BARREL</text>
+<path d="M 500.000,160.000 L 496.136,133.278" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 671.122,135.254 L 667.257,108.532" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 496.1356805682239,133.2779672305942 L 667.2573989067808,108.53175922011324" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(581.70,120.90) rotate(-8.23)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Waist 16.50</text>
+<path d="M 500.000,160.000 L 440.043,162.279" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 515.750,574.417 L 455.793,576.695" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 440.0432850048609,162.27866781073072 L 455.79328500486076,576.6954848326938" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(447.92,369.49) rotate(87.82)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Side arc 40.00</text>
+<path d="M 742.185,349.702 L 768.096,360.315" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 650.150,574.417 L 676.061,585.029" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 768.0962165459124,360.31473693263456 L 676.0610042015153,585.0290675499635" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(722.08,472.67) rotate(292.27)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Inseam arc 23.38</text>
+<path d="M 515.750,574.417 L 515.750,609.417" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 650.150,574.417 L 650.150,609.417" fill="none" stroke="#98a7b9" stroke-width="0.8"/>
+<path d="M 515.7499999999999,609.416817021963 L 650.1499999999999,609.416817021963" stroke="#2563a6" fill="none" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+<text transform="translate(582.95,609.42) rotate(0.00)" y="-7" text-anchor="middle" fill="#2563a6" font-size="14">Hem 12.80</text>
+<path d="M 495.435,244.000 L 684.435,244.000" fill="none" stroke="#839b86" stroke-width="1.5" stroke-dasharray="5 4"/>
+<path d="M 479.000,392.073 L 718.177,392.073" fill="none" stroke="#839b86" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="490.00" y="406.07" font-size="11" fill="#24344a" text-anchor="start">Barrel station</text>
 <text x="508.00" y="236.00" font-size="12" fill="#24344a" text-anchor="start">Hip width 18.00</text>
-<text x="512.00" y="305.00" font-size="13" fill="#24344a" text-anchor="start">Upper centre: 10.00</text>
-<text x="512.00" y="329.00" font-size="13" fill="#24344a" text-anchor="start">Crotch curve: 13.50</text>
+<text x="512.00" y="305.00" font-size="13" fill="#24344a" text-anchor="start">Upper centre curve: 10.45</text>
+<text x="512.00" y="329.00" font-size="13" fill="#24344a" text-anchor="start">Crotch curve: 13.05</text>
 <text x="512.00" y="353.00" font-size="13" fill="#24344a" text-anchor="start">Full rise seam: 23.50</text>
 <text x="512.00" y="377.00" font-size="11" fill="#24344a" text-anchor="start">(waist edge to crotch tip)</text>
 <text x="512.00" y="420.00" font-size="11" fill="#24344a" text-anchor="start">Grain: vertical</text>
@@ -86,9 +90,9 @@
 <text x="905.00" y="284.00" font-size="14" fill="#24344a" text-anchor="start">Developed total side</text>
 <text x="1345.00" y="284.00" font-size="15" fill="#24344a" text-anchor="end">46.00</text>
 <text x="905.00" y="313.00" font-size="14" fill="#24344a" text-anchor="start">Front vertical rise incl. band</text>
-<text x="1345.00" y="313.00" font-size="15" fill="#24344a" text-anchor="end">19.78</text>
-<text x="905.00" y="342.00" font-size="14" fill="#24344a" text-anchor="start">Back raise above shaped side</text>
-<text x="1345.00" y="342.00" font-size="15" fill="#24344a" text-anchor="end">1.83</text>
+<text x="1345.00" y="313.00" font-size="15" fill="#24344a" text-anchor="end">19.60</text>
+<text x="905.00" y="342.00" font-size="14" fill="#24344a" text-anchor="start">Centre-back rise above side</text>
+<text x="1345.00" y="342.00" font-size="15" fill="#24344a" text-anchor="end">2.36</text>
 <text x="905.00" y="371.00" font-size="14" fill="#24344a" text-anchor="start">Shell opening / leg</text>
 <text x="1345.00" y="371.00" font-size="15" fill="#24344a" text-anchor="end">25.60</text>
 <text x="905.00" y="400.00" font-size="14" fill="#24344a" text-anchor="start">Waistband finished height</text>
@@ -131,7 +135,7 @@
 <text x="790.00" y="792.00" font-size="14" fill="#24344a" text-anchor="start">Relaxed loop 18.00; finished height 3.00</text>
 <text x="790.00" y="815.00" font-size="12" fill="#24344a" text-anchor="start">Dashed centre = fold; inner dashed box = stitch line.</text>
 <text x="45.00" y="875.00" font-size="18" fill="#24344a" text-anchor="start">HOW TO READ THIS SHEET</text>
-<text x="45.00" y="906.00" font-size="14" fill="#24344a" text-anchor="start">Shell dimensions exclude seam allowance; rib CUT dimensions include allowances.</text>
+<text x="45.00" y="906.00" font-size="14" fill="#24344a" text-anchor="start">Curved-edge labels are seam-walked lengths; dimension arrows connect endpoints.</text>
 <text x="45.00" y="928.00" font-size="14" fill="#24344a" text-anchor="start">Front and back each cut as a mirrored pair. Two hem widths make the opening of ONE leg.</text>
 <text x="45.00" y="950.00" font-size="14" fill="#24344a" text-anchor="start">Full shell crotch seam (front + back, excluding waistband): 41.50 cm.</text>
 <text x="45.00" y="972.00" font-size="14" fill="#24344a" text-anchor="start">The body was measured over diaper and leggings. Baste and check standing, sitting and squatting.</text>

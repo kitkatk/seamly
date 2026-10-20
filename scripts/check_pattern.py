@@ -25,101 +25,86 @@ def evaluate(text, variables):
     return result
 
 
-def check(path=PATTERN, schema=None):
+def check(path=PATTERN,schema=None):
+    from annotate_pattern import load,curve_between,curve_length,curve_at,point_at_y
     doc=E.parse(str(path))
     if schema:E.XMLSchema(E.parse(str(schema))).assertValid(doc)
-    variables={}
-    for v in doc.findall('.//variables/variable'):
-        variables[v.get('name')[1:]]=evaluate(v.get('formula'),variables)
-    points={}; names={}; curves={}; ids=[]
-    def polar(p,angle,length):
-        a=math.radians(angle)
-        return (p[0]+length*math.cos(a),p[1]-length*math.sin(a))
-    for block in doc.findall('draftBlock'):
-        for item in block.find('calculation'):
-            id_=item.get('id'); ids.append(id_)
-            if item.tag=='point':
-                if item.get('type')=='single':p=(float(item.get('x')),float(item.get('y')))
-                else:p=polar(points[item.get('basePoint')],evaluate(item.get('angle'),variables),evaluate(item.get('length'),variables))
-                points[id_]=p;names[item.get('name')]=p
-            elif item.tag=='spline':
-                a,b=points[item.get('point1')],points[item.get('point4')]
-                curves[id_]=(a,polar(a,evaluate(item.get('angle1'),variables),evaluate(item.get('length1'),variables)),polar(b,evaluate(item.get('angle2'),variables),evaluate(item.get('length2'),variables)),b)
-        for item in block.find('modeling'):
-            ids.append(item.get('id'))
-            assert item.get('idObject') in (points if item.tag=='point' else curves)
-        for piece in block.find('pieces'):
-            ids.append(piece.get('id'))
-            assert piece.get('seamAllowance')=='true'
-            assert evaluate(piece.get('width'),variables)==variables['sa']
-            models={x.get('id'):x for x in block.find('modeling')}
-            assert all(x.get('idObject') in models for x in piece.findall('./nodes/node'))
-    assert len(ids)==len(set(ids)), 'Duplicate object IDs'
+    v,blocks=load(path);measure={};angles={};side_curves={}
+    allids=[n.get('id') for n in doc.findall('.//*[@id]')]
+    assert len(allids)==len(set(allids)), 'Duplicate object IDs'
     assert len(doc.findall('.//piece'))==4
-    distance=math.dist
-    front=distance(names['FCrotch'],names['FInnerHem'])
-    back=distance(names['BCrotch'],names['BInnerHem'])
-    assert abs(front-back)<1e-8, 'Inseams do not match'
-    from annotate_pattern import curve_length
-    side_lengths={};side_angles={}
-    for pre in ('F','B'):
-        side=next(c for c in curves.values() if math.dist(c[0],names[pre+'SideWaist'])<1e-8)
-        upper=curve_length(side)
-        assert abs(upper-curve_length(side,512))<1e-6, 'Side curve integration did not converge'
-        tangent=(side[1][0]-side[0][0],side[1][1]-side[0][1])
-        waist=(names[pre+'Waist'][0]-side[0][0],names[pre+'Waist'][1]-side[0][1])
-        dot=sum(a*b for a,b in zip(tangent,waist))/(math.hypot(*tangent)*math.hypot(*waist))
-        assert abs(dot)<1e-10, 'Waist/side junction is not square'
-        side_angles[pre]=math.degrees(math.acos(max(-1,min(1,dot))))
-        end=(side[3][0]-side[2][0],side[3][1]-side[2][1])
-        lower=(names[pre+'OuterHem'][0]-side[3][0],names[pre+'OuterHem'][1]-side[3][1])
-        assert abs(end[0]*lower[1]-end[1]*lower[0])/(math.hypot(*end)*math.hypot(*lower))<1e-10, 'Hip transition has a corner'
-        assert sum(a*b for a,b in zip(end,lower))>0, 'Hip transition reverses direction'
-        assert all(side[i+1][1]>side[i][1] for i in range(3)), 'Side curve may fold or cusp'
-        side_lengths[pre]=upper+distance(names[pre+'HipSide'],names[pre+'OuterHem'])
-    side_f=side_lengths['F'];side_b=side_lengths['B']
-    assert abs(side_f-side_b)<1e-8
-    assert abs(side_f-variables['shell_length'])<1e-8, 'Shell side length target not met'
-    assert side_f>variables['rise'] and side_f>variables['back_crotch_y'], 'Hem must be below crotch tips'
-    hip=2*(distance(names['FHipSide'],names['FHip'])+distance(names['BHipSide'],names['BHip']))
-    assert abs(hip-variables['hip']-variables['hip_ease'])<1e-8
-    shell_waist=2*(distance(names['FSideWaist'],names['FWaist'])+distance(names['BSideWaist'],names['BWaist']))
-    for p in ('F','B'):
-        assert names[p+'InnerHem'][1]>names[p+'Crotch'][1]>names[p+'Hip'][1]
-    from annotate_pattern import curve_length
-    contours = {}
-    for prefix, target in [('F','front_rise_target'),('B','back_rise_target')]:
-        arc = next(c for c in curves.values() if math.dist(c[0],names[prefix+'Hip'])<1e-8)
-        rise = distance(names[prefix+'Waist'],names[prefix+'Hip']) + curve_length(arc)
-        assert abs(rise-variables[target])<1e-6, 'Seam-walked rise target not met'
-        assert abs(distance(names[prefix+'SideWaist'],names[prefix+'Waist'])-variables['front_waist' if prefix=='F' else 'back_waist'])<1e-8
-        assert abs(distance(names[prefix+'HipSide'],names[prefix+'Hip'])-variables['front_width' if prefix=='F' else 'back_width'])<1e-8
-        assert abs(distance(names[prefix+'OuterHem'],names[prefix+'InnerHem'])-variables['hem_width'])<1e-8
-        contours[prefix]=rise
-    result={
-        'hip_circumference_cm':round(hip,3), 'shell_waist_circumference_cm':round(shell_waist,3),
-        'finished_side_length_cm':round(side_f+variables['band_height']+variables['cuff_height'],3),
-        'matching_inseam_seam_length_cm':round(front,3),
-        'front_rise_seam_cm':round(contours['F'],3),
-        'back_rise_seam_cm':round(contours['B'],3),
-        'front_waist_seam_cm':variables['front_waist'],
-        'back_waist_seam_cm':variables['back_waist'],
-        'front_hip_width_cm':variables['front_width'],
-        'back_hip_width_cm':variables['back_width'],
-        'hem_width_each_piece_cm':variables['hem_width'],
-        'shell_side_seam_cm':round(side_f,3),
-        'front_waist_side_angle_degrees':round(side_angles['F'],6),
-        'back_waist_side_angle_degrees':round(side_angles['B'],6),
-        'front_crotch_depth_from_finished_side_waist_cm':variables['rise']+variables['band_height'],
-        'upper_thigh_circumference_at_tips_cm':round(variables['front_width']+variables['front_ext']+variables['back_width']+variables['back_ext'],3),
-        'shell_leg_opening_cm':variables['hem'],
-        'waist_rib_cut_cm':[variables['band_length']+2*variables['sa'],2*variables['band_height']+2*variables['sa']],
-        'cuff_rib_cut_cm':[variables['cuff_length']+2*variables['sa'],2*variables['cuff_height']+2*variables['sa']],
-        'waist_rib_stretch_to_attach_percent':round((shell_waist/variables['band_length']-1)*100,1),
-        'waist_rib_stretch_to_pass_body_hip_percent':round((variables['hip']/variables['band_length']-1)*100,1),
-        'cuff_rib_stretch_to_attach_percent':round((variables['hem']/variables['cuff_length']-1)*100,1),
+    def vec(a,b):return b[0]-a[0],b[1]-a[1]
+    def unit_dot(a,b):return sum(x*y for x,y in zip(a,b))/(math.hypot(*a)*math.hypot(*b))
+    for pre,(_,p,cs) in zip(('F','B'),blocks[:2]):
+        c=lambda a,b:curve_between(p,cs,pre+a,pre+b)
+        centre=c('Waist','Hip');scoop=c('Hip','Crotch');inside=c('Crotch','InnerHem')
+        su=c('SideWaist','Barrel');sl=c('Barrel','OuterHem')
+        wc=c('SideWaist','Waist') if pre=='B' else None
+        waistlen=curve_length(wc) if wc else math.dist(p[pre+'SideWaist'],p[pre+'Waist'])
+        rise=curve_length(centre)+curve_length(scoop)
+        side=curve_length(su)+curve_length(sl)
+        for q in cs:
+            assert abs(curve_length(q)-curve_length(q,512))<1e-6, 'Curve integration did not converge'
+            assert math.dist(q[0],q[1])>0 and math.dist(q[2],q[3])>0
+        assert abs(rise-v['front_rise_target' if pre=='F' else 'back_rise_target'])<1e-6
+        assert abs(waistlen-v['front_waist' if pre=='F' else 'back_waist'])<1e-6
+        assert abs(side-v['shell_length'])<1e-6, 'Full curved side target missed'
+        hipwidth=math.dist(p[pre+'HipSide'],p[pre+'Hip'])
+        assert abs(hipwidth-v['front_width' if pre=='F' else 'back_width'])<1e-6
+        assert abs(math.dist(p[pre+'OuterHem'],p[pre+'InnerHem'])-v['hem_width'])<1e-6
+        waist_t=vec(wc[0],wc[1]) if wc else vec(p[pre+'SideWaist'],p[pre+'Waist'])
+        dot=unit_dot(vec(su[0],su[1]),waist_t);assert abs(dot)<1e-10
+        angles[pre]=math.degrees(math.acos(max(-1,min(1,dot))))
+        assert unit_dot(vec(centre[2],centre[3]),vec(scoop[0],scoop[1]))>1-1e-10, 'Centre seam has a corner at hip'
+        end_waist=vec(wc[2],wc[3]) if wc else waist_t
+        assert abs(unit_dot(end_waist,vec(centre[0],centre[1])))<1e-10, 'Centre waist is not square'
+        assert unit_dot(vec(su[2],su[3]),vec(sl[0],sl[1]))>1-1e-10, 'Side has a corner at barrel station'
+        assert abs(unit_dot(vec(sl[2],sl[3]),vec(p[pre+'OuterHem'],p[pre+'InnerHem'])))<1e-10
+        assert abs(unit_dot(vec(inside[2],inside[3]),vec(p[pre+'OuterHem'],p[pre+'InnerHem'])))<1e-10
+        for q in (su,sl,inside,centre,scoop):
+            assert all(q[i+1][1]>=q[i][1]-1e-10 for i in range(3))
+            assert q[-1][1]>q[0][1], 'Curve reverses vertically'
+        assert math.dist(point_at_y(su,p[pre+'HipSide'][1]),p[pre+'HipSide'])<1e-6
+        knee_y=p[pre+'Barrel'][1]
+        knee_width=point_at_y(inside,knee_y)[0]-p[pre+'Barrel'][0]
+        assert knee_width>v['hem_width'], 'No knee-to-hem taper'
+        for i in range(101):
+            y=inside[0][1]+(inside[-1][1]-inside[0][1])*i/100
+            out=su if y<=su[-1][1] else sl
+            assert point_at_y(inside,y)[0]>point_at_y(out,y)[0], 'Leg edges cross'
+        origin=p[pre+'O']
+        side_curves[pre]=[tuple((x-origin[0],y-origin[1]) for x,y in q) for q in (su,sl)]
+        measure[pre]={'waist':waistlen,'hip':hipwidth,'rise':rise,'side':side,'inseam':curve_length(inside),'knee':knee_width}
+    for a,b in zip(side_curves['F'],side_curves['B']):
+        for x,y in zip(a,b):assert math.dist(x,y)<1e-7, 'Front/back side shapes do not match'
+    assert abs(measure['F']['inseam']-measure['B']['inseam'])<1e-6
+    for block in doc.findall('draftBlock'):
+        calc={n.get('id') for n in block.find('calculation')};models={n.get('id'):n for n in block.find('modeling')}
+        for n in models.values():assert n.get('idObject') in calc
+        for piece in block.find('pieces'):
+            assert piece.get('seamAllowance')=='true' and evaluate(piece.get('width'),v)==v['sa']
+            for n in piece.findall('./nodes/node'):assert n.get('idObject') in models
+    shellwaist=sum(m['waist'] for m in measure.values())*2
+    return {
+        'shell_waist_circumference_cm':round(shellwaist,3),
+        'hip_circumference_cm':round(2*sum(m['hip'] for m in measure.values()),3),
+        'shell_side_seam_cm':round(measure['F']['side'],3),
+        'developed_total_side_cm':round(measure['F']['side']+v['band_height']+v['cuff_height'],3),
+        'shell_vertical_height_cm':round(v['shell_vertical_height'],3),
+        'matching_curved_inseam_cm':round(measure['F']['inseam'],3),
+        'front_rise_seam_cm':round(measure['F']['rise'],3),'back_rise_seam_cm':round(measure['B']['rise'],3),
+        'front_waist_seam_cm':round(measure['F']['waist'],3),'back_waist_seam_cm':round(measure['B']['waist'],3),
+        'front_hip_width_cm':round(measure['F']['hip'],3),'back_hip_width_cm':round(measure['B']['hip'],3),
+        'hem_width_each_piece_cm':v['hem_width'],'shell_leg_opening_cm':v['hem'],
+        'barrel_station_leg_circumference_cm':round(sum(m['knee'] for m in measure.values()),3),
+        'barrel_station_depth_cm':round(v['barrel_level']*v['shell_vertical_height'],3),
+        'front_waist_side_angle_degrees':round(angles['F'],6),'back_waist_side_angle_degrees':round(angles['B'],6),
+        'back_raise_cm':round(v['back_raise'],3),
+        'waist_rib_cut_cm':[v['band_length']+2*v['sa'],2*v['band_height']+2*v['sa']],
+        'cuff_rib_cut_cm':[v['cuff_length']+2*v['sa'],2*v['cuff_height']+2*v['sa']],
+        'waist_rib_stretch_to_attach_percent':round((shellwaist/v['band_length']-1)*100,1),
+        'cuff_rib_stretch_to_attach_percent':round((v['hem']/v['cuff_length']-1)*100,1),
     }
-    return result
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser()

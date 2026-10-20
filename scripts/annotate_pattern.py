@@ -38,6 +38,26 @@ def curve_length(c,n=1024):
     return (speed(0)+speed(1)+sum((4 if i%2 else 2)*speed(i/n) for i in range(1,n)))/(3*n)
 
 
+def curve_between(points,curves,start,end):
+    for c in curves:
+        if math.dist(c[0],points[start])<1e-7 and math.dist(c[-1],points[end])<1e-7:return c
+    raise ValueError(f'Missing curve {start} -> {end}')
+
+
+def curve_at(c,t):
+    return tuple((1-t)**3*c[0][i]+3*(1-t)**2*t*c[1][i]+3*(1-t)*t*t*c[2][i]+t**3*c[3][i] for i in (0,1))
+
+
+def point_at_y(c,y):
+    lo,hi=0.0,1.0
+    assert c[0][1]-1e-7<=y<=c[-1][1]+1e-7
+    for _ in range(45):
+        mid=(lo+hi)/2
+        if curve_at(c,mid)[1]<y:lo=mid
+        else:hi=mid
+    return curve_at(c,(lo+hi)/2)
+
+
 def render(path,output):
     v,blocks=load(path); measures={};svg=[]
     def add(s):svg.append(s)
@@ -59,38 +79,50 @@ def render(path,output):
     add('<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1020" viewBox="0 0 1400 1020">')
     add('<defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 10 0 L 0 5 L 10 10" fill="none" stroke="#2563a6"/></marker></defs>')
     add('<rect width="1400" height="1020" fill="white"/><g font-family="DejaVu Sans, sans-serif">')
-    text(45,38,f"SIZE {v['size']:g}  |  Dimensioned pattern review",26)
+    text(45,38,f"SIZE {v['size']:g}  |  Barrel-leg pattern review",26)
     text(45,66,f"All dimensions in cm on STITCHING lines. {v['sa']:g} cm seam allowance is excluded from the shell drawing.",16)
-    text(45,89,'Snapshot of the supplied .sm2d file; regenerate after edits. Review sheet — do not use as a cutting layout.',14)
+    text(45,89,'Original barrel-inspired redraft. Full curved side and inseam; not a cutting layout. Fit sample required.',14)
     for idx,(title,p,cs) in enumerate(blocks[:2]):
         pre='F' if idx==0 else 'B';origin=p[pre+'O'];ox=110+idx*390;oy=160;scale=10.5
         def xy(q):return ox+(q[0]-origin[0])*scale,oy+(q[1]-origin[1])*scale
         def point(s):return xy(p[pre+s])
         sw,cw,ch,ct,ih,oh=[point(s) for s in ['SideWaist','Waist','Hip','Crotch','InnerHem','OuterHem']]
-        c=cs[0]; cv=[xy(q) for q in c]
-        side=next(q for q in cs if math.dist(q[0],p[pre+'SideWaist'])<1e-8)
-        sc=[xy(q) for q in side]
-        d=f'M {sw[0]},{sw[1]} L {cw[0]},{cw[1]} L {ch[0]},{ch[1]} C {cv[1][0]},{cv[1][1]} {cv[2][0]},{cv[2][1]} {ct[0]},{ct[1]} L {ih[0]},{ih[1]} L {oh[0]},{oh[1]} L {point('HipSide')[0]},{point('HipSide')[1]} C {sc[2][0]},{sc[2][1]} {sc[1][0]},{sc[1][1]} {sw[0]},{sw[1]} Z'
+        centre=curve_between(p,cs,pre+'Waist',pre+'Hip');cc=[xy(q) for q in centre]
+        c=curve_between(p,cs,pre+'Hip',pre+'Crotch'); cv=[xy(q) for q in c]
+        inside=curve_between(p,cs,pre+'Crotch',pre+'InnerHem');ic=[xy(q) for q in inside]
+        upper=curve_between(p,cs,pre+'SideWaist',pre+'Barrel');uc=[xy(q) for q in upper]
+        lower=curve_between(p,cs,pre+'Barrel',pre+'OuterHem');lc=[xy(q) for q in lower]
+        waist=curve_between(p,cs,pre+'SideWaist',pre+'Waist') if pre=='B' else None
+        d=f'M {sw[0]},{sw[1]} '
+        if waist:
+            w=[xy(q) for q in waist];d+=f'C {w[1][0]},{w[1][1]} {w[2][0]},{w[2][1]} {cw[0]},{cw[1]} '
+        else:d+=f'L {cw[0]},{cw[1]} '
+        d+=f'C {cc[1][0]},{cc[1][1]} {cc[2][0]},{cc[2][1]} {ch[0]},{ch[1]} C {cv[1][0]},{cv[1][1]} {cv[2][0]},{cv[2][1]} {ct[0]},{ct[1]} '
+        d+=f'C {ic[1][0]},{ic[1][1]} {ic[2][0]},{ic[2][1]} {ih[0]},{ih[1]} L {oh[0]},{oh[1]} '
+        d+=f'C {lc[2][0]},{lc[2][1]} {lc[1][0]},{lc[1][1]} {lc[0][0]},{lc[0][1]} '
+        d+=f'C {uc[2][0]},{uc[2][1]} {uc[1][0]},{uc[1][1]} {sw[0]},{sw[1]} Z'
         add(f'<path d="{d}" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>')
         for label,pos in [('O',sw),('Waist',cw),('Hip',ch),('Crotch',ct),('InnerHem',ih),('OuterHem',oh)]:
             add(f'<circle cx="{pos[0]}" cy="{pos[1]}" r="2.5" fill="#24344a"/>')
             if label in ('Waist','Hip','Crotch'):text(pos[0]+5,pos[1]-5,pre+label,11)
         text(sw[0]+8,sw[1]+20,'90°',12,'#2563a6')
-        text(ox+12,oy+38,'FRONT' if idx==0 else 'BACK',20)
+        text(ox+12,oy+38,'FRONT BARREL' if idx==0 else 'BACK BARREL',17)
         def dist(a,b):return math.dist(p[pre+a],p[pre+b])
-        lens={'waist':dist('SideWaist','Waist'),'upper_centre':dist('Waist','Hip'),'crotch_curve':curve_length(c),
-              'inseam':dist('Crotch','InnerHem'),'hem':dist('InnerHem','OuterHem'),'side':dist('OuterHem','HipSide')+curve_length(side),
+        lens={'waist':curve_length(waist) if waist else dist('SideWaist','Waist'),'upper_centre':curve_length(centre),'crotch_curve':curve_length(c),
+              'inseam':curve_length(inside),'hem':dist('InnerHem','OuterHem'),'side':curve_length(upper)+curve_length(lower),
               'hip_width':dist('HipSide','Hip')}
         assert abs(lens['crotch_curve']-curve_length(c,512))<1e-6
         assert lens['crotch_curve']>=math.dist(c[0],c[-1])
         lens['full_rise_seam']=lens['upper_centre']+lens['crotch_curve'];measures[pre]=lens
         dim(sw,cw,f"Waist {lens['waist']:.2f}",-27)
-        dim(sw,oh,f"Side {lens['side']:.2f}",35)
-        dim(ct,ih,f"Inseam {lens['inseam']:.2f}",-28)
+        dim(sw,oh,f"Side arc {lens['side']:.2f}",60)
+        dim(ct,ih,f"Inseam arc {lens['inseam']:.2f}",-28)
         dim(oh,ih,f"Hem {lens['hem']:.2f}",35)
         line(point('HipSide'),ch,'#839b86',True)
+        line(point('Barrel'),xy(point_at_y(inside,p[pre+'Barrel'][1])),'#839b86',True)
+        text(ox-10,point('Barrel')[1]+14,'Barrel station',11)
         text(ox+8,ch[1]-8,f"Hip width {lens['hip_width']:.2f}",12)
-        text(ox+12,oy+145,f"Upper centre: {lens['upper_centre']:.2f}",13)
+        text(ox+12,oy+145,f"Upper centre curve: {lens['upper_centre']:.2f}",13)
         text(ox+12,oy+169,f"Crotch curve: {lens['crotch_curve']:.2f}",13)
         text(ox+12,oy+193,f"Full rise seam: {lens['full_rise_seam']:.2f}",13)
         text(ox+12,oy+217,'(waist edge to crotch tip)',11)
@@ -99,7 +131,7 @@ def render(path,output):
     summary=[('Body waist / hip',f"{v['waist']:.0f} / {v['hip']:.0f}"),('Finished shell hip',f"{v['hip_finished']:.2f}"),
              ('Shell waist opening',f"{2*(measures['F']['waist']+measures['B']['waist']):.2f}"),
              ('Shell side length',f"{v['shell_length']:.2f}"),('Developed total side',f"{v['shell_length']+v['band_height']+v['cuff_height']:.2f}"),
-             ('Front vertical rise incl. band',f"{v['rise']+v['band_height']:.2f}"),('Back raise above shaped side',f"{v['back_raise']+v['back_side_y']:.2f}"),
+             ('Front vertical rise incl. band',f"{v['rise']+v['band_height']:.2f}"),('Centre-back rise above side',f"{v['back_raise']:.2f}"),
              ('Shell opening / leg',f"{v['hem']:.2f}"),('Waistband finished height',f"{v['band_height']:.2f}"),('Cuff finished height',f"{v['cuff_height']:.2f}"),('Waist/side angles F / B','90° / 90°')]
     for i,(k,val) in enumerate(summary):text(905,168+i*29,k,14);text(1345,168+i*29,val,15,anchor='end')
     for i,t in enumerate([f"{v['shell_length']+v['band_height']+v['cuff_height']:.2f} cm is developed fabric length.", 'Cuffs sit at the ankle; excess blouses.', 'Crotch seam length differs from', 'vertical rise and from body height.', 'Rib lengths remain provisional.']):text(905,490+i*23,t,14)
@@ -115,7 +147,7 @@ def render(path,output):
         text(x,y+h+28,f"Relaxed loop {length:.2f}; finished height {v[heightkey]:.2f}",14)
         text(x,y+h+51,'Dashed centre = fold; inner dashed box = stitch line.',12)
     text(45,875,'HOW TO READ THIS SHEET',18)
-    notes=['Shell dimensions exclude seam allowance; rib CUT dimensions include allowances.',
+    notes=['Curved-edge labels are seam-walked lengths; dimension arrows connect endpoints.',
            'Front and back each cut as a mirrored pair. Two hem widths make the opening of ONE leg.',
            'Full shell crotch seam (front + back, excluding waistband): '+f"{measures['F']['full_rise_seam']+measures['B']['full_rise_seam']:.2f} cm.",
            'The body was measured over diaper and leggings. Baste and check standing, sitting and squatting.',
