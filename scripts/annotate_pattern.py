@@ -66,7 +66,7 @@ def render(path,output):
         pre='F' if idx==0 else 'B';origin=p[pre+'O'];ox=110+idx*390;oy=160;scale=10.5
         def xy(q):return ox+(q[0]-origin[0])*scale,oy+(q[1]-origin[1])*scale
         def point(s):return xy(p[pre+s])
-        sw,cw,ch,ct,ih,oh=[point(s) for s in ['O','Waist','Hip','Crotch','InnerHem','OuterHem']]
+        sw,cw,ch,ct,ih,oh=[point(s) for s in ['SideWaist','Waist','Hip','Crotch','InnerHem','OuterHem']]
         c=cs[0]; cv=[xy(q) for q in c]
         d=f'M {sw[0]},{sw[1]} L {cw[0]},{cw[1]} L {ch[0]},{ch[1]} C {cv[1][0]},{cv[1][1]} {cv[2][0]},{cv[2][1]} {ct[0]},{ct[1]} L {ih[0]},{ih[1]} L {oh[0]},{oh[1]} L {point('HipSide')[0]},{point('HipSide')[1]} Z'
         add(f'<path d="{d}" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>')
@@ -75,8 +75,8 @@ def render(path,output):
             if label in ('Waist','Hip','Crotch'):text(pos[0]+5,pos[1]-5,pre+label,11)
         text(ox+12,oy+38,'FRONT' if idx==0 else 'BACK',20)
         def dist(a,b):return math.dist(p[pre+a],p[pre+b])
-        lens={'waist':dist('O','Waist'),'upper_centre':dist('Waist','Hip'),'crotch_curve':curve_length(c),
-              'inseam':dist('Crotch','InnerHem'),'hem':dist('InnerHem','OuterHem'),'side':dist('OuterHem','HipSide')+dist('HipSide','O'),
+        lens={'waist':dist('SideWaist','Waist'),'upper_centre':dist('Waist','Hip'),'crotch_curve':curve_length(c),
+              'inseam':dist('Crotch','InnerHem'),'hem':dist('InnerHem','OuterHem'),'side':dist('OuterHem','HipSide')+dist('HipSide','SideWaist'),
               'hip_width':dist('HipSide','Hip')}
         assert abs(lens['crotch_curve']-curve_length(c,512))<1e-6
         assert lens['crotch_curve']>=math.dist(c[0],c[-1])
@@ -91,12 +91,12 @@ def render(path,output):
         text(ox+12,oy+169,f"Crotch curve: {lens['crotch_curve']:.2f}",13)
         text(ox+12,oy+193,f"Full rise seam: {lens['full_rise_seam']:.2f}",13)
         text(ox+12,oy+217,'(waist edge to crotch tip)',11)
-        text(ox+12,oy+260,'Grain parallel to upper side',11)
+        text(ox+12,oy+260,'Grain parallel to vertical reference',11)
     text(905,132,'SIZING CHECK',20)
     summary=[('Body waist / hip',f"{v['waist']:.0f} / {v['hip']:.0f}"),('Finished shell hip',f"{v['hip_finished']:.2f}"),
              ('Shell waist opening',f"{2*(measures['F']['waist']+measures['B']['waist']):.2f}"),
              ('Shell side length',f"{v['shell_length']:.2f}"),('Developed total side',f"{v['shell_length']+v['band_height']+v['cuff_height']:.2f}"),
-             ('Front vertical rise incl. band',f"{v['rise']+v['band_height']:.2f}"),('Back waist raise',f"{v['back_raise']:.2f}"),
+             ('Front vertical rise incl. band',f"{v['rise']+v['band_height']:.2f}"),('Back raise above shaped side',f"{v['back_raise']+v['back_side_y']:.2f}"),
              ('Shell opening / leg',f"{v['hem']:.2f}"),('Waistband finished height',f"{v['band_height']:.2f}"),('Cuff finished height',f"{v['cuff_height']:.2f}")]
     for i,(k,val) in enumerate(summary):text(905,168+i*29,k,14);text(1345,168+i*29,val,15,anchor='end')
     for i,t in enumerate([f"{v['shell_length']+v['band_height']+v['cuff_height']:.2f} cm is developed fabric length.", 'Cuffs sit at the ankle; excess blouses.', 'Crotch seam length differs from', 'vertical rise and from body height.', 'Rib lengths remain provisional.']):text(905,490+i*23,t,14)

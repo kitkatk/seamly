@@ -36,8 +36,11 @@ VARIABLES = [
  ('inseam', '25', 'Vertical crotch to floor measured OVER diaper and leggings; reference only'),
  ('front_rise_target', '18', 'Front seam-walked rise, excluding rib waistband and seam allowance'),
  ('back_rise_target', '23.5', 'Back seam-walked rise, excluding rib waistband and seam allowance'),
- ('front_waist', '16', 'Front piece waist stitching-line length'),
- ('back_waist', '18', 'Back piece waist stitching-line length, including its slope'),
+ ('front_waist_before_take_in', '16', 'Original front waist edge before side-only shaping'),
+ ('back_waist_before_take_in', '18', 'Original back waist edge before side-only shaping'),
+ ('waist_take_in', '1.5', 'Removed from EACH side waist edge, tapering to zero at hip'),
+ ('front_waist', '#front_waist_before_take_in-#waist_take_in', 'Front piece waist stitching-line length'),
+ ('back_waist', '#back_waist_before_take_in-#waist_take_in', 'Back piece waist stitching-line length, including its slope'),
  ('front_width', '16.5', 'Front piece horizontal hip width'),
  ('back_width', '18', 'Back piece horizontal hip width'),
  ('hem_width', '12.8', 'Hem stitching-line width on EACH front and back piece'),
@@ -53,8 +56,8 @@ VARIABLES = [
  ('hip_finished', '2*(#front_width+#back_width)', 'Full finished shell hip circumference'),
  ('hip_ease', '#hip_finished-#hip', 'Resulting total hip ease'),
  ('hem', '2*#hem_width', 'Shell opening circumference per leg'),
- ('front_waist_x', '#front_waist', 'Horizontal front waist projection'),
- ('back_waist_x', 'sqrt(#back_waist^2-#back_raise^2)', 'Horizontal back waist projection'),
+ ('front_waist_x', '#front_waist+#waist_take_in', 'Horizontal front waist projection'),
+ ('back_waist_x', 'sqrt((#back_waist+#waist_take_in)^2-#back_raise^2)', 'Horizontal back waist projection'),
  ('front_upper', 'sqrt((#front_width-#front_waist_x)^2+#hip_depth^2)', 'Straight centre front above crotch curve'),
  ('back_upper', 'sqrt((#back_width-#back_waist_x)^2+(#hip_depth+#back_raise)^2)', 'Straight centre back above crotch curve'),
  ('front_curve_length', '#front_rise_target-#front_upper', 'Required front crotch curve length'),
@@ -69,8 +72,14 @@ VARIABLES = [
  ('back_crotch_y', '#hip_depth+#back_curve_length*#back_shape_dy', 'Back crotch-tip depth below shell side waist'),
  ('front_run', '#front_width+#front_ext-#hem_width', 'Horizontal front inseam run'),
  ('back_run', '#back_width+#back_ext-#hem_width', 'Horizontal back inseam run'),
- ('front_inseam_length', 'sqrt((#shell_length-#rise)^2+#front_run^2)', 'Straight front inseam length'),
- ('back_lower_side', '#shell_length-#hip_depth', 'Back side length below hip reference'),
+ ('front_side_x', '#waist_take_in', 'New front side waist, centre front unchanged'),
+ ('back_side_x', '#back_waist_x*#waist_take_in/(#back_waist+#waist_take_in)', 'New back side waist, measured along original waist edge'),
+ ('back_side_y', '-#back_raise*#waist_take_in/(#back_waist+#waist_take_in)', 'Back side waist elevation after side-only take-in'),
+ ('front_upper_side', 'sqrt(#front_side_x^2+#hip_depth^2)', 'Front shaped side from waist to hip'),
+ ('back_upper_side', 'sqrt(#back_side_x^2+(#hip_depth-#back_side_y)^2)', 'Back shaped side from waist to hip'),
+ ('front_hem_y', '#hip_depth+#shell_length-#front_upper_side', 'Front hem position, maintaining walked side length'),
+ ('front_inseam_length', 'sqrt((#front_hem_y-#rise)^2+#front_run^2)', 'Straight front inseam length'),
+ ('back_lower_side', '#shell_length-#back_upper_side', 'Back side length below hip reference'),
  ('back_circle_dy', '#back_crotch_y-#hip_depth', 'Circle-centre vertical separation for lower-leg balance'),
  ('back_circle_distance', 'sqrt(#back_run^2+#back_circle_dy^2)', 'Distance between lower-leg construction circle centres'),
  ('back_circle_a', '(#back_lower_side^2-#front_inseam_length^2+#back_circle_distance^2)/(2*#back_circle_distance)', 'Circle intersection projection'),
@@ -92,7 +101,7 @@ def generate():
     r = ET.Element('pattern')
     for tag, text in [('version', '0.7.5'), ('unit', 'cm'),
                       ('description', 'Size 86 roomy overtrousers; original draft; cut front/back mirrored pairs. Folded rib waistband and cuffs. Fit sample required.'),
-                      ('notes', 'All inputs in Variables. No external measurement file. User revised seam targets: front/back rise 18/23.5, waist 16/18, hip width 16.5/18, each piece hem 12.8 cm. Main fabric sides fixed at 40 cm; lower back leg balanced to match inseams. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.'),
+                      ('notes', 'All inputs in Variables. No external measurement file. User revised seam targets: front/back rise 18/23.5, waist 14.5/16.5 (62 cm total), side-only take-in 1.5 cm per piece, hip width 16.5/18, each piece hem 12.8 cm. Main fabric sides fixed at 40 cm; lower back leg balanced to match inseams. Includes 3 cm waistband and 3 cm cuff. Measurements taken over diaper and leggings; cuffs at ankle. Rib lengths and ankle estimate provisional. Seam allowance 1 cm. See README.'),
                       ('measurements', '')]:
         sub(r, tag).text = text
     vs = sub(r, 'variables')
@@ -125,13 +134,13 @@ def generate():
             return sub(calc,'spline', id=ident(),type='simpleInteractive',point1=a,point4=b,
                        angle1=angle1,angle2=angle2,length1=len1,length2=len2,color='black',penStyle='solidLine').get('id')
         if ext:
-            sw = anchor
+            sw = point('SideWaist', '#front_side_x' if prefix=='F' else '#back_side_x', '0' if prefix=='F' else '#back_side_y')
             waist_x = '#front_waist_x' if prefix=='F' else '#back_waist_x'
             cw = point('Waist', waist_x, '-('+raise_+')')
             ch = point('Hip', width, '#hip_depth')
             ct = point('Crotch', width+'+'+ext, tip)
             hem_x = '0' if prefix=='F' else '#back_hem_x'
-            hem_y = '#shell_length' if prefix=='F' else '#back_hem_y'
+            hem_y = '#front_hem_y' if prefix=='F' else '#back_hem_y'
             ih = point('InnerHem', hem_x+'+#hem_width', hem_y)
             oh = point('OuterHem', hem_x, hem_y)
             # Smooth vertical centre-to-horizontal crotch scoop; endpoints remain editable.
@@ -160,7 +169,7 @@ def generate():
               seamAllowance='true',width='#sa',inLayout='true',forbidFlipping='false')
         data=sub(p,'data',visible='true',fontSize='10',mx=str(origin[0]+2),my=str(origin[1]+3),
                  width='10',height='5',rotation='0',quantity=quantity,onFold='false')
-        for txt in [title,'Size 86 / cm','Seam allowance enabled','Fold lengthwise at half height' if not ext else 'Grain parallel to upper side']:
+        for txt in [title,'Size 86 / cm','Seam allowance enabled','Fold lengthwise at half height' if not ext else 'Grain parallel to vertical reference']:
             sub(data,'line',text=txt)
         sub(p,'patternInfo',visible='false')
         if ext:

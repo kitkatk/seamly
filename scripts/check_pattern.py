@@ -60,14 +60,14 @@ def check(path=PATTERN, schema=None):
     front=distance(names['FCrotch'],names['FInnerHem'])
     back=distance(names['BCrotch'],names['BInnerHem'])
     assert abs(front-back)<1e-8, 'Inseams do not match'
-    side_f=distance(names['FO'],names['FHipSide'])+distance(names['FHipSide'],names['FOuterHem'])
-    side_b=distance(names['BO'],names['BHipSide'])+distance(names['BHipSide'],names['BOuterHem'])
+    side_f=distance(names['FSideWaist'],names['FHipSide'])+distance(names['FHipSide'],names['FOuterHem'])
+    side_b=distance(names['BSideWaist'],names['BHipSide'])+distance(names['BHipSide'],names['BOuterHem'])
     assert abs(side_f-side_b)<1e-8
     assert abs(side_f-variables['shell_length'])<1e-8, 'Shell side length target not met'
     assert side_f>variables['rise'] and side_f>variables['back_crotch_y'], 'Hem must be below crotch tips'
     hip=2*(distance(names['FHipSide'],names['FHip'])+distance(names['BHipSide'],names['BHip']))
     assert abs(hip-variables['hip']-variables['hip_ease'])<1e-8
-    shell_waist=2*(distance(names['FO'],names['FWaist'])+distance(names['BO'],names['BWaist']))
+    shell_waist=2*(distance(names['FSideWaist'],names['FWaist'])+distance(names['BSideWaist'],names['BWaist']))
     for p in ('F','B'):
         assert names[p+'InnerHem'][1]>names[p+'Crotch'][1]>names[p+'Hip'][1]
     from annotate_pattern import curve_length
@@ -76,7 +76,7 @@ def check(path=PATTERN, schema=None):
         arc = next(c for c in curves.values() if math.dist(c[0],names[prefix+'Hip'])<1e-8)
         rise = distance(names[prefix+'Waist'],names[prefix+'Hip']) + curve_length(arc)
         assert abs(rise-variables[target])<1e-6, 'Seam-walked rise target not met'
-        assert abs(distance(names[prefix+'O'],names[prefix+'Waist'])-variables['front_waist' if prefix=='F' else 'back_waist'])<1e-8
+        assert abs(distance(names[prefix+'SideWaist'],names[prefix+'Waist'])-variables['front_waist' if prefix=='F' else 'back_waist'])<1e-8
         assert abs(distance(names[prefix+'HipSide'],names[prefix+'Hip'])-variables['front_width' if prefix=='F' else 'back_width'])<1e-8
         assert abs(distance(names[prefix+'OuterHem'],names[prefix+'InnerHem'])-variables['hem_width'])<1e-8
         contours[prefix]=rise
