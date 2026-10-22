@@ -58,6 +58,13 @@ def point_at_y(c,y):
     return curve_at(c,(lo+hi)/2)
 
 
+def corner_angle(side,waist):
+    a=tuple(side[1][i]-side[0][i] for i in (0,1))
+    b=tuple(waist[1][i]-waist[0][i] for i in (0,1))
+    cosine=sum(x*y for x,y in zip(a,b))/(math.hypot(*a)*math.hypot(*b))
+    return math.degrees(math.acos(max(-1,min(1,cosine))))
+
+
 def render(path,output):
     v,blocks=load(path); measures={};svg=[]
     def add(s):svg.append(s)
@@ -79,60 +86,53 @@ def render(path,output):
     add('<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1020" viewBox="0 0 1400 1020">')
     add('<defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 10 0 L 0 5 L 10 10" fill="none" stroke="#2563a6"/></marker></defs>')
     add('<rect width="1400" height="1020" fill="white"/><g font-family="DejaVu Sans, sans-serif">')
-    text(45,38,f"SIZE {v['size']:g}  |  Barrel-leg pattern review",26)
+    text(45,38,f"SIZE {v['size']:g}  |  Dimensioned pattern review",26)
     text(45,66,f"All dimensions in cm on STITCHING lines. {v['sa']:g} cm seam allowance is excluded from the shell drawing.",16)
-    text(45,89,'Original barrel-inspired redraft. Full curved side and inseam; not a cutting layout. Fit sample required.',14)
+    text(45,89,'Based on 2a2e18f: concave waist shaping; trued assembled waist. Review sheet, not a cutting layout.',14)
     for idx,(title,p,cs) in enumerate(blocks[:2]):
         pre='F' if idx==0 else 'B';origin=p[pre+'O'];ox=110+idx*390;oy=160;scale=10.5
         def xy(q):return ox+(q[0]-origin[0])*scale,oy+(q[1]-origin[1])*scale
         def point(s):return xy(p[pre+s])
         sw,cw,ch,ct,ih,oh=[point(s) for s in ['SideWaist','Waist','Hip','Crotch','InnerHem','OuterHem']]
-        centre=curve_between(p,cs,pre+'Waist',pre+'Hip');cc=[xy(q) for q in centre]
-        c=curve_between(p,cs,pre+'Hip',pre+'Crotch'); cv=[xy(q) for q in c]
-        inside=curve_between(p,cs,pre+'Crotch',pre+'InnerHem');ic=[xy(q) for q in inside]
-        upper=curve_between(p,cs,pre+'SideWaist',pre+'Barrel');uc=[xy(q) for q in upper]
-        lower=curve_between(p,cs,pre+'Barrel',pre+'OuterHem');lc=[xy(q) for q in lower]
-        waist=curve_between(p,cs,pre+'SideWaist',pre+'Waist') if pre=='B' else None
+        c=curve_between(p,cs,pre+'Hip',pre+'Crotch');cv=[xy(q) for q in c]
+        side=curve_between(p,cs,pre+'SideWaist',pre+'HipSide');sc=[xy(q) for q in side]
+        waist=curve_between(p,cs,pre+'SideWaist',pre+'Waist') if pre=='F' else None
+        w=[xy(q) for q in waist] if waist else None
         d=f'M {sw[0]},{sw[1]} '
-        if waist:
-            w=[xy(q) for q in waist];d+=f'C {w[1][0]},{w[1][1]} {w[2][0]},{w[2][1]} {cw[0]},{cw[1]} '
+        if w:d+=f'C {w[1][0]},{w[1][1]} {w[2][0]},{w[2][1]} {cw[0]},{cw[1]} '
         else:d+=f'L {cw[0]},{cw[1]} '
-        d+=f'C {cc[1][0]},{cc[1][1]} {cc[2][0]},{cc[2][1]} {ch[0]},{ch[1]} C {cv[1][0]},{cv[1][1]} {cv[2][0]},{cv[2][1]} {ct[0]},{ct[1]} '
-        d+=f'C {ic[1][0]},{ic[1][1]} {ic[2][0]},{ic[2][1]} {ih[0]},{ih[1]} L {oh[0]},{oh[1]} '
-        d+=f'C {lc[2][0]},{lc[2][1]} {lc[1][0]},{lc[1][1]} {lc[0][0]},{lc[0][1]} '
-        d+=f'C {uc[2][0]},{uc[2][1]} {uc[1][0]},{uc[1][1]} {sw[0]},{sw[1]} Z'
+        d+=f'L {ch[0]},{ch[1]} C {cv[1][0]},{cv[1][1]} {cv[2][0]},{cv[2][1]} {ct[0]},{ct[1]} L {ih[0]},{ih[1]} L {oh[0]},{oh[1]} L {point('HipSide')[0]},{point('HipSide')[1]} '
+        d+=f'C {sc[2][0]},{sc[2][1]} {sc[1][0]},{sc[1][1]} {sw[0]},{sw[1]} Z'
         add(f'<path d="{d}" fill="#eef5f0" stroke="#24344a" stroke-width="2"/>')
         for label,pos in [('O',sw),('Waist',cw),('Hip',ch),('Crotch',ct),('InnerHem',ih),('OuterHem',oh)]:
             add(f'<circle cx="{pos[0]}" cy="{pos[1]}" r="2.5" fill="#24344a"/>')
             if label in ('Waist','Hip','Crotch'):text(pos[0]+5,pos[1]-5,pre+label,11)
-        text(sw[0]+8,sw[1]+20,'90°',12,'#2563a6')
-        text(ox+12,oy+38,'FRONT BARREL' if idx==0 else 'BACK BARREL',17)
+        text(ox+12,oy+38,'FRONT' if idx==0 else 'BACK',20)
         def dist(a,b):return math.dist(p[pre+a],p[pre+b])
-        lens={'waist':curve_length(waist) if waist else dist('SideWaist','Waist'),'upper_centre':curve_length(centre),'crotch_curve':curve_length(c),
-              'inseam':curve_length(inside),'hem':dist('InnerHem','OuterHem'),'side':curve_length(upper)+curve_length(lower),
+        lens={'waist':curve_length(waist) if waist else dist('SideWaist','Waist'),'upper_centre':dist('Waist','Hip'),'crotch_curve':curve_length(c),
+              'inseam':dist('Crotch','InnerHem'),'hem':dist('InnerHem','OuterHem'),'side':dist('OuterHem','HipSide')+curve_length(side),
               'hip_width':dist('HipSide','Hip')}
         assert abs(lens['crotch_curve']-curve_length(c,512))<1e-6
         assert lens['crotch_curve']>=math.dist(c[0],c[-1])
         lens['full_rise_seam']=lens['upper_centre']+lens['crotch_curve'];measures[pre]=lens
         dim(sw,cw,f"Waist {lens['waist']:.2f}",-27)
-        dim(sw,oh,f"Side arc {lens['side']:.2f}",60)
-        dim(ct,ih,f"Inseam arc {lens['inseam']:.2f}",-28)
+        dim(sw,oh,f"Side arc {lens['side']:.2f}",55)
+        dim(ct,ih,f"Inseam {lens['inseam']:.2f}",-28)
         dim(oh,ih,f"Hem {lens['hem']:.2f}",35)
         line(point('HipSide'),ch,'#839b86',True)
-        line(point('Barrel'),xy(point_at_y(inside,p[pre+'Barrel'][1])),'#839b86',True)
-        text(ox-10,point('Barrel')[1]+14,'Barrel station',11)
         text(ox+8,ch[1]-8,f"Hip width {lens['hip_width']:.2f}",12)
-        text(ox+12,oy+145,f"Upper centre curve: {lens['upper_centre']:.2f}",13)
+        text(ox+12,oy+145,f"Upper centre: {lens['upper_centre']:.2f}",13)
         text(ox+12,oy+169,f"Crotch curve: {lens['crotch_curve']:.2f}",13)
         text(ox+12,oy+193,f"Full rise seam: {lens['full_rise_seam']:.2f}",13)
         text(ox+12,oy+217,'(waist edge to crotch tip)',11)
-        text(ox+12,oy+260,'Grain: vertical',11)
+        text(ox+12,oy+242,f"Waist/side: {corner_angle(side,waist if waist else (p[pre+'SideWaist'],p[pre+'Waist'])):.1f} degrees",12)
+        text(ox+12,oy+268,'Grain: vertical',11)
     text(905,132,'SIZING CHECK',20)
     summary=[('Body waist / hip',f"{v['waist']:.0f} / {v['hip']:.0f}"),('Finished shell hip',f"{v['hip_finished']:.2f}"),
              ('Shell waist opening',f"{2*(measures['F']['waist']+measures['B']['waist']):.2f}"),
              ('Shell side length',f"{v['shell_length']:.2f}"),('Developed total side',f"{v['shell_length']+v['band_height']+v['cuff_height']:.2f}"),
-             ('Front vertical rise incl. band',f"{v['rise']+v['band_height']:.2f}"),('Centre-back rise above side',f"{v['back_raise']:.2f}"),
-             ('Shell opening / leg',f"{v['hem']:.2f}"),('Waistband finished height',f"{v['band_height']:.2f}"),('Cuff finished height',f"{v['cuff_height']:.2f}"),('Waist/side angles F / B','90° / 90°')]
+             ('Front vertical rise incl. band',f"{v['rise']+v['band_height']:.2f}"),('Back raise above shaped side',f"{v['back_raise']+v['back_side_y']:.2f}"),
+             ('Shell opening / leg',f"{v['hem']:.2f}"),('Waistband finished height',f"{v['band_height']:.2f}"),('Cuff finished height',f"{v['cuff_height']:.2f}")]
     for i,(k,val) in enumerate(summary):text(905,168+i*29,k,14);text(1345,168+i*29,val,15,anchor='end')
     for i,t in enumerate([f"{v['shell_length']+v['band_height']+v['cuff_height']:.2f} cm is developed fabric length.", 'Cuffs sit at the ankle; excess blouses.', 'Crotch seam length differs from', 'vertical rise and from body height.', 'Rib lengths remain provisional.']):text(905,490+i*23,t,14)
     # Rib rectangles are raw cutting dimensions, explicitly distinguished from shell seams.
@@ -147,7 +147,7 @@ def render(path,output):
         text(x,y+h+28,f"Relaxed loop {length:.2f}; finished height {v[heightkey]:.2f}",14)
         text(x,y+h+51,'Dashed centre = fold; inner dashed box = stitch line.',12)
     text(45,875,'HOW TO READ THIS SHEET',18)
-    notes=['Curved-edge labels are seam-walked lengths; dimension arrows connect endpoints.',
+    notes=['Shell dimensions exclude allowances. Curved-edge labels are walked lengths; arrows connect endpoints.',
            'Front and back each cut as a mirrored pair. Two hem widths make the opening of ONE leg.',
            'Full shell crotch seam (front + back, excluding waistband): '+f"{measures['F']['full_rise_seam']+measures['B']['full_rise_seam']:.2f} cm.",
            'The body was measured over diaper and leggings. Baste and check standing, sitting and squatting.',
@@ -160,8 +160,42 @@ def render(path,output):
     import cairosvg
     cairosvg.svg2png(url=str(svgpath),write_to=str(output/'annotated_dimensions.png'))
     cairosvg.svg2pdf(url=str(svgpath),write_to=str(output/'annotated_dimensions.pdf'))
+    render_waist_join(blocks,output)
     print(json.dumps(measures,indent=2))
     return measures
+
+def render_waist_join(blocks,output):
+    """Local tangent-plane truing check, using actual native seam curves."""
+    svg=['<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="650" viewBox="0 0 1000 650">',
+         '<rect width="1000" height="650" fill="white"/><g font-family="DejaVu Sans,sans-serif" fill="#24344a">',
+         '<text x="40" y="42" font-size="24">Joined waist: local seam-tangent check</text>',
+         '<text x="40" y="73" font-size="16">Front and back side tangents aligned as sewn; dimensions exclude allowances.</text>']
+    scale=65;origin=(500,265);angles={}
+    for pre,(_,p,cs),mirror,color in zip(('F','B'),blocks[:2],(-1,1),('#247c64','#2563a6')):
+        side=curve_between(p,cs,pre+'SideWaist',pre+'HipSide');sw=side[0]
+        u=tuple((side[1][i]-sw[i])/math.dist(side[1],sw) for i in (0,1));n=(u[1],-u[0])
+        def project(q):
+            d=(q[0]-sw[0],q[1]-sw[1]);a=sum(d[i]*u[i] for i in (0,1));b=sum(d[i]*n[i] for i in (0,1))
+            return origin[0]+mirror*b*scale,origin[1]+a*scale
+        waist=curve_between(p,cs,pre+'SideWaist',pre+'Waist') if pre=='F' else None
+        angles[pre]=corner_angle(side,waist if waist else (sw,p[pre+'Waist']))
+        points=[curve_at(waist,i/250) for i in range(81)] if waist else [sw,tuple(sw[j]+(p[pre+'Waist'][j]-sw[j])*4/16.5 for j in (0,1))]
+        coords=[project(q) for q in points]
+        path='M '+' L '.join(f'{x:.3f},{y:.3f}' for x,y in coords)
+        svg.append(f'<path d="{path}" stroke="{color}" stroke-width="4" fill="none"/>')
+        x,y=coords[-1];svg.append(f'<text x="{x:.2f}" y="{y-15:.2f}" font-size="18" text-anchor="middle">{"FRONT" if pre=="F" else "BACK"} waist</text>')
+    svg.extend(['<path d="M 500,245 L 500,485" stroke="#8796a8" stroke-width="2" stroke-dasharray="7 5"/>',
+        '<circle cx="500" cy="265" r="5" fill="#24344a"/>',
+        '<text x="515" y="435" font-size="16">Sewn side tangent</text>',
+        f'<text x="40" y="535" font-size="17">Front {angles["F"]:.2f} degrees + back {angles["B"]:.2f} degrees = {sum(angles.values()):.2f} degrees.</text>',
+        '<text x="40" y="566" font-size="17">A 180-degree sum makes the waist tangent continuous across the side seam.</text>',
+        '<text x="40" y="605" font-size="15">This local tangent alignment checks truing, not the three-dimensional fit on the child.</text>',
+        '</g></svg>'])
+    path=output/'waist_join.svg';path.write_text('\n'.join(svg)+'\n')
+    import cairosvg
+    cairosvg.svg2png(url=str(path),write_to=str(output/'waist_join.png'))
+    cairosvg.svg2pdf(url=str(path),write_to=str(output/'waist_join.pdf'))
+
 
 if __name__=='__main__':
     ap=argparse.ArgumentParser(description=__doc__)

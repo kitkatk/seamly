@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="650" viewBox="0 0 1000 650">
+<rect width="1000" height="650" fill="white"/><g font-family="DejaVu Sans,sans-serif" fill="#24344a">
+<text x="40" y="42" font-size="24">Joined waist: local seam-tangent check</text>
+<text x="40" y="73" font-size="16">Front and back side tangents aligned as sewn; dimensions exclude allowances.</text>
+<path d="M 500.000,265.000 L 498.153,265.653 L 496.278,266.280 L 494.375,266.880 L 492.444,267.455 L 490.485,268.004 L 488.498,268.528 L 486.485,269.027 L 484.444,269.500 L 482.376,269.948 L 480.281,270.371 L 478.159,270.770 L 476.011,271.144 L 473.837,271.494 L 471.636,271.819 L 469.410,272.121 L 467.157,272.398 L 464.879,272.652 L 462.576,272.882 L 460.247,273.088 L 457.893,273.272 L 455.514,273.432 L 453.110,273.569 L 450.681,273.683 L 448.228,273.775 L 445.751,273.844 L 443.250,273.891 L 440.724,273.916 L 438.175,273.919 L 435.602,273.900 L 433.006,273.859 L 430.386,273.796 L 427.743,273.712 L 425.078,273.607 L 422.389,273.481 L 419.678,273.334 L 416.945,273.166 L 414.189,272.977 L 411.411,272.769 L 408.612,272.539 L 405.790,272.290 L 402.947,272.021 L 400.083,271.731 L 397.197,271.422 L 394.290,271.094 L 391.362,270.746 L 388.414,270.380 L 385.445,269.994 L 382.456,269.589 L 379.446,269.165 L 376.417,268.723 L 373.367,268.263 L 370.298,267.784 L 367.209,267.287 L 364.101,266.772 L 360.974,266.240 L 357.827,265.690 L 354.662,265.122 L 351.478,264.537 L 348.276,263.935 L 345.055,263.316 L 341.816,262.681 L 338.559,262.028 L 335.285,261.359 L 331.992,260.674 L 328.682,259.972 L 325.355,259.255 L 322.011,258.521 L 318.649,257.772 L 315.271,257.007 L 311.877,256.227 L 308.465,255.432 L 305.038,254.621 L 301.594,253.796 L 298.134,252.956 L 294.659,252.101 L 291.168,251.232 L 287.661,250.348 L 284.140,249.450 L 280.603,248.539 L 277.051,247.613" stroke="#247c64" stroke-width="4" fill="none"/>
+<text x="277.05" y="232.61" font-size="18" text-anchor="middle">FRONT waist</text>
+<path d="M 500.000,265.000 L 744.368,176.206" stroke="#2563a6" stroke-width="4" fill="none"/>
+<text x="744.37" y="161.21" font-size="18" text-anchor="middle">BACK waist</text>
+<path d="M 500,245 L 500,485" stroke="#8796a8" stroke-width="2" stroke-dasharray="7 5"/>
+<circle cx="500" cy="265" r="5" fill="#24344a"/>
+<text x="515" y="435" font-size="16">Sewn side tangent</text>
+<text x="40" y="535" font-size="17">Front 70.03 degrees + back 109.97 degrees = 180.00 degrees.</text>
+<text x="40" y="566" font-size="17">A 180-degree sum makes the waist tangent continuous across the side seam.</text>
+<text x="40" y="605" font-size="15">This local tangent alignment checks truing, not the three-dimensional fit on the child.</text>
+</g></svg>

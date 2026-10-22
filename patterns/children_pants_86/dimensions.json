@@ -1,25 +1,24 @@
 {
-  "shell_waist_circumference_cm": 62.0,
   "hip_circumference_cm": 69.0,
-  "shell_side_seam_cm": 40.0,
-  "developed_total_side_cm": 46.0,
-  "shell_vertical_height_cm": 39.468,
-  "matching_curved_inseam_cm": 23.384,
+  "shell_waist_circumference_cm": 62.0,
+  "finished_side_length_cm": 46.0,
+  "matching_inseam_seam_length_cm": 23.932,
   "front_rise_seam_cm": 18.0,
   "back_rise_seam_cm": 23.5,
   "front_waist_seam_cm": 14.5,
   "back_waist_seam_cm": 16.5,
   "front_hip_width_cm": 16.5,
-  "back_hip_width_cm": 18.0,
+  "back_hip_width_cm": 18,
   "hem_width_each_piece_cm": 12.8,
+  "shell_side_seam_cm": 40.0,
+  "front_waist_side_angle_degrees": 70.031,
+  "back_waist_side_angle_degrees": 109.969,
+  "minimum_front_waist_curve_radius_cm": 1.7,
+  "front_crotch_depth_from_finished_side_waist_cm": 19.775110144088817,
+  "upper_thigh_circumference_at_tips_cm": 42.75,
   "shell_leg_opening_cm": 25.6,
-  "barrel_station_leg_circumference_cm": 42.09,
-  "barrel_station_depth_cm": 22.102,
-  "front_waist_side_angle_degrees": 90.0,
-  "back_waist_side_angle_degrees": 90.0,
-  "back_raise_cm": 2.357,
   "waist_rib_cut_cm": [
-    49,
+    49.0,
     8
   ],
   "cuff_rib_cut_cm": [
@@ -27,5 +26,6 @@
     8
   ],
   "waist_rib_stretch_to_attach_percent": 31.9,
+  "waist_rib_stretch_to_pass_body_hip_percent": 17.0,
   "cuff_rib_stretch_to_attach_percent": 42.2
 }
